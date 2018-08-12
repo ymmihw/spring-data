@@ -1,13 +1,13 @@
-### Relevant Articles:
+## Relevant Articles:
 
 
-#### Spring Data LDAP
+### Spring Data LDAP
 
 Module | Article
 --|--
 spring-data-ldap-intro | [Guide to Spring Data LDAP](https://www.baeldung.com/spring-data-ldap)
 
-#### Spring Data JPA
+### Spring Data JPA
 Module | Article
 --|--
 with-spring-security | [Spring Data with Spring Security](http://www.baeldung.com/spring-data-with-spring-security)
@@ -15,13 +15,13 @@ simple-tagging | [A Simple Tagging Implementation with JPA](http://www.baeldung.
 advanced-tagging | [An Advanced Tagging Implementation with JPA](http://www.baeldung.com/jpa-tagging-advanced)
 query-annotation | [Spring Data JPA @Query](http://www.baeldung.com/spring-data-jpa-query)
 
-#### Spring Data Redis
+### Spring Data Redis
 Module | Article
 --|--
 spring-data-redis-introduction |  [Introduction to Spring Data Redis](http://www.baeldung.com/spring-data-redis-tutorial)
 spring-data-redis-pubsub |  [PubSub Messaging with Spring Data Redis](http://www.baeldung.com/spring-data-redis-pub-sub)
 
-#### Spring Data MongoDB
+### Spring Data MongoDB
 Module | Article
 --|--
 mongodb-introduction | [Introduction to Spring Data MongoDB](http://www.baeldung.com/spring-data-mongodb-tutorial)
@@ -31,9 +31,17 @@ mongodb-custom-cascading | [Custom Cascading in Spring Data MongoDB](http://www.
 mongodb-gridfs | [GridFS in Spring Data MongoDB](http://www.baeldung.com/spring-data-mongodb-gridfs)
 mongodb-projection-aggregation | [Spring Data MongoDB: Projections and Aggregations](http://www.baeldung.com/spring-data-mongodb-projections-aggregations)
 
-#### Spring Data Elasticsearch
+### Spring Data Elasticsearch
 Module | Article
 --|--
 spring-data-elasticsearch-introduction |  [Introduction to Spring Data Elasticsearch](http://www.baeldung.com/spring-data-elasticsearch-tutorial)
 spring-data-elasticsearch-queries |  [Elasticsearch Queries with Spring Data](http://www.baeldung.com/spring-data-elasticsearch-queries)
 spring-data-elasticsearch-tags |  [A Simple Tagging Implementation with Elasticsearch](http://www.baeldung.com/elasticsearch-tagging)
+
+### Spring Data REST
+Module | Article
+--|--
+spring-data-rest-introduction | [Introduction to Spring Data REST](http://www.baeldung.com/spring-data-rest-intro)
+spring-data-rest-validator | [Guide to Spring Data REST Validators](http://www.baeldung.com/spring-data-rest-validators)
+spring-data-rest-relationships | [Working with Relationships in Spring Data REST](http://www.baeldung.com/spring-data-rest-relationships)
+spring-data-rest-projections | [Projections and Excerpts in Spring Data REST](http://www.baeldung.com/spring-data-rest-projections-excerpts)
