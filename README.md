@@ -8,6 +8,9 @@ Module | Article
 spring-data-ldap-intro | [Guide to Spring Data LDAP](https://www.baeldung.com/spring-data-ldap)
 
 ---
+
+
+
 ### Spring Data JPA
 Module | Article
 --|--
@@ -15,6 +18,11 @@ with-spring-security | [Spring Data with Spring Security](http://www.baeldung.co
 simple-tagging | [A Simple Tagging Implementation with JPA](http://www.baeldung.com/jpa-tagging)
 advanced-tagging | [An Advanced Tagging Implementation with JPA](http://www.baeldung.com/jpa-tagging-advanced)
 query-annotation | [Spring Data JPA @Query](http://www.baeldung.com/spring-data-jpa-query)
+spring-data-jpa-multiple-databases | [Spring JPA – Multiple Databases](http://www.baeldung.com/spring-data-jpa-multiple-databases)
+
+
+
+
 ---
 ### Spring Data Redis
 Module | Article
