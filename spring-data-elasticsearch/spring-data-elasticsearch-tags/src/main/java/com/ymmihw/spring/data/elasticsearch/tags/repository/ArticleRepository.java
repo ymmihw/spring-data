@@ -1,0 +1,20 @@
+package com.ymmihw.spring.data.elasticsearch.tags.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.annotations.Query;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.stereotype.Repository;
+import com.ymmihw.spring.data.elasticsearch.tags.model.Article;
+
+@Repository
+public interface ArticleRepository extends ElasticsearchRepository<Article, String> {
+  @Query("{\"bool\": {\"must\": {\"match_all\": {}}, \"filter\": {\"term\": {\"tags\": \"?0\" }}}}")
+  Page<Article> findByFilteredTagQuery(String tag, Pageable pageable);
+
+  @Query("{\"bool\": {\"must\": {\"match\": {\"authors.name\": \"?0\"}}, \"filter\": {\"term\": {\"tags\": \"?1\" }}}}")
+  Page<Article> findByAuthorsNameAndFilteredTagQuery(String name, String tag, Pageable pageable);
+
+  @Query("{\"bool\": {\"must\": [{\"match\": {\"tags\": \"?0\"}}]}}")
+  Page<Article> findByTagUsingDeclaredQuery(String tag, Pageable pageable);
+}
