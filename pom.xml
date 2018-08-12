@@ -20,7 +20,4 @@
 
  <dependencies>
  </dependencies>
- <modules>
-  <module>spring-data-ldap</module>
- </modules>
 </project>
