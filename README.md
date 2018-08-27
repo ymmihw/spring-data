@@ -19,9 +19,7 @@ simple-tagging | [A Simple Tagging Implementation with JPA](http://www.baeldung.
 advanced-tagging | [An Advanced Tagging Implementation with JPA](http://www.baeldung.com/jpa-tagging-advanced)
 query-annotation | [Spring Data JPA @Query](http://www.baeldung.com/spring-data-jpa-query)
 spring-data-jpa-multiple-databases | [Spring JPA – Multiple Databases](http://www.baeldung.com/spring-data-jpa-multiple-databases)
-
-
-
+composable-repositories | [Spring Data Composable Repositories](https://www.baeldung.com/spring-data-composable-repositories)
 
 ---
 ### Spring Data Redis
