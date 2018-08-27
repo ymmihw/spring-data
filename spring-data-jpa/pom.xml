@@ -34,7 +34,4 @@
    <artifactId>h2</artifactId>
   </dependency>
  </dependencies>
- <modules>
-  <module>composable-repositories</module>
- </modules>
 </project>
