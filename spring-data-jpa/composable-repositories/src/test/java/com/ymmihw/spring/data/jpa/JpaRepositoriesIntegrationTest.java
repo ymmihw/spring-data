@@ -31,7 +31,7 @@ public class JpaRepositoriesIntegrationTest {
   @Autowired
   private StoreRepository storeRepository;
   @Autowired
-  private ItemTypeRepository compositeRepository;
+  private ItemTypeRepository composedRepository;
 
   @Test
   public void whenSaveLocation_ThenGetSameLocation() {
@@ -56,33 +56,49 @@ public class JpaRepositoriesIntegrationTest {
 
   @Test
   public void givenItemTypeId_whenDeleted_ThenItemTypeDeleted() {
-    Optional<ItemType> itemType = compositeRepository.findById(1L);
+    Optional<ItemType> itemType = composedRepository.findById(1L);
     assertTrue(itemType.isPresent());
-    compositeRepository.deleteCustom(itemType.get());
-    itemType = compositeRepository.findById(1L);
+    composedRepository.deleteCustom(itemType.get());
+    itemType = composedRepository.findById(1L);
     assertFalse(itemType.isPresent());
   }
 
   @Test
   public void givenItemId_whenUsingCustomRepo_ThenDeleteAppropriateEntity() {
-    Item item = compositeRepository.findItemById(1L);
+    Item item = composedRepository.findItemById(1L);
     assertNotNull(item);
-    compositeRepository.deleteCustom(item);
-    item = compositeRepository.findItemById(1L);
+    composedRepository.deleteCustom(item);
+    item = composedRepository.findItemById(1L);
     assertNull(item);
   }
 
   @Test
   public void givenItemAndItemType_WhenAmbiguousDeleteCalled_ThenItemTypeDeletedAndNotItem() {
-    Optional<ItemType> itemType = compositeRepository.findById(1L);
+    Optional<ItemType> itemType = composedRepository.findById(1L);
     assertTrue(itemType.isPresent());
-    Item item = compositeRepository.findItemById(2L);
+    Item item = composedRepository.findItemById(2L);
     assertNotNull(item);
 
-    compositeRepository.findThenDelete(1L);
-    Optional<ItemType> sameItemType = compositeRepository.findById(1L);
+    composedRepository.findThenDelete(1L);
+    Optional<ItemType> sameItemType = composedRepository.findById(1L);
     assertFalse(sameItemType.isPresent());
-    Item sameItem = compositeRepository.findItemById(2L);
+    Item sameItem = composedRepository.findItemById(2L);
+    assertNotNull(sameItem);
+  }
+
+  @Test
+  public void givenItemAndItemTypeWhenDeleteThenItemTypeDeleted() {
+    Optional<ItemType> itemType = composedRepository.findById(1L);
+    assertTrue(itemType.isPresent());
+
+    Item item = composedRepository.findItemById(2L);
+    assertNotNull(item);
+
+    composedRepository.findThenDelete(1L);
+    Optional<ItemType> sameItemType = composedRepository.findById(1L);
+    assertFalse(sameItemType.isPresent());
+
+    Item sameItem = composedRepository.findItemById(2L);
     assertNotNull(sameItem);
   }
 
