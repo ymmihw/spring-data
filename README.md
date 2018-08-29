@@ -6,10 +6,7 @@
 Module | Article
 --|--
 spring-data-ldap-intro | [Guide to Spring Data LDAP](https://www.baeldung.com/spring-data-ldap)
-
 ---
-
-
 
 ### Spring Data JPA
 Module | Article
@@ -20,7 +17,7 @@ advanced-tagging | [An Advanced Tagging Implementation with JPA](http://www.bael
 query-annotation | [Spring Data JPA @Query](http://www.baeldung.com/spring-data-jpa-query)
 spring-data-jpa-multiple-databases | [Spring JPA – Multiple Databases](http://www.baeldung.com/spring-data-jpa-multiple-databases)
 composable-repositories | [Spring Data Composable Repositories](https://www.baeldung.com/spring-data-composable-repositories)
-
+query-by-date-and-time | [Query Entities by Dates and Times with Spring Data JPA](https://www.baeldung.com/spring-data-jpa-query-by-date)
 ---
 ### Spring Data Redis
 Module | Article
