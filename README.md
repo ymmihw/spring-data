@@ -49,3 +49,4 @@ spring-data-rest-introduction | [Introduction to Spring Data REST](http://www.ba
 spring-data-rest-validator | [Guide to Spring Data REST Validators](http://www.baeldung.com/spring-data-rest-validators)
 spring-data-rest-relationships | [Working with Relationships in Spring Data REST](http://www.baeldung.com/spring-data-rest-relationships)
 spring-data-rest-projections | [Projections and Excerpts in Spring Data REST](http://www.baeldung.com/spring-data-rest-projections-excerpts)
+spring-data-rest-hal | [Spring REST and HAL Browser](https://www.baeldung.com/spring-rest-hal)
