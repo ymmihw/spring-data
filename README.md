@@ -50,7 +50,7 @@ spring-data-rest-validator | [Guide to Spring Data REST Validators](http://www.b
 spring-data-rest-relationships | [Working with Relationships in Spring Data REST](http://www.baeldung.com/spring-data-rest-relationships)
 spring-data-rest-projections | [Projections and Excerpts in Spring Data REST](http://www.baeldung.com/spring-data-rest-projections-excerpts)
 spring-data-rest-hal | [Spring REST and HAL Browser](https://www.baeldung.com/spring-rest-hal)
-
+spring-data-rest-events | [Spring Data REST Events with @RepositoryEventHandler](https://www.baeldung.com/spring-data-rest-events)
 ---
 ### Spring Data KeyValue
 Module | Article
