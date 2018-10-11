@@ -44,7 +44,7 @@ public class StudentRepositoryImplTest {
     studentRepository.saveStudent(engStudent);
     studentRepository.saveStudent(medStudent);
     final Map<Object, Object> retrievedStudent = studentRepository.findAllStudents();
-    assertEquals(retrievedStudent.size(), 2);
+    assertEquals(2, retrievedStudent.size());
   }
 
   @Test
