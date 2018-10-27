@@ -1,5 +1,11 @@
 ## Relevant Articles:
 
+### Spring Data LDAP
+
+Module | Article
+--|--
+spring-data-solr-intro | [Introduction to Spring Data Solr](https://www.baeldung.com/spring-data-solr)
+---
 
 ### Spring Data LDAP
 

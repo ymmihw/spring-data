@@ -1,0 +1,2 @@
+spring.data.solr.repositories.enabled=true
+spring.data.solr.host=http://192.168.1.101:8983/solr
