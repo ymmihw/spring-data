@@ -62,3 +62,13 @@ spring-data-rest-events | [Spring Data REST Events with @RepositoryEventHandler]
 Module | Article
 --|--
 spring-data-keyvalue-intro | [A Guide to Spring Data Key Value](https://www.baeldung.com/spring-data-key-value)
+
+### Spring Data Solr
+Module | Article
+--|--
+spring-data-solr-intro | [Introduction to Spring Data Solr](https://www.baeldung.com/spring-data-solr)
+
+### Spring Data Neo4j
+Module | Article
+--|--
+spring-data-neo4j-intro | [Introduction to Spring Data Neo4j](http://www.baeldung.com/spring-data-neo4j-intro)
