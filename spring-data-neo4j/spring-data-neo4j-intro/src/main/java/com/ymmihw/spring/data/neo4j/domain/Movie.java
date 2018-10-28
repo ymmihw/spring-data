@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-
 @NodeEntity
 public class Movie {
   @Id
