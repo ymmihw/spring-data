@@ -30,6 +30,7 @@ Module | Article
 --|--
 spring-data-redis-introduction |  [Introduction to Spring Data Redis](http://www.baeldung.com/spring-data-redis-tutorial)
 spring-data-redis-pubsub |  [PubSub Messaging with Spring Data Redis](http://www.baeldung.com/spring-data-redis-pub-sub)
+spring-data-redis-reactive | [An Introduction to Spring Data Redis Reactive](https://www.baeldung.com/spring-data-redis-reactive)
 ---
 ### Spring Data MongoDB
 Module | Article
