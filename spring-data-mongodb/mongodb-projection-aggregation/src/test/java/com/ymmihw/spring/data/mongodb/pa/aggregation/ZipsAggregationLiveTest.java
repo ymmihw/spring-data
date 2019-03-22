@@ -49,10 +49,12 @@ public class ZipsAggregationLiveTest {
 
   @Autowired
   private MongoTemplate mongoTemplate;
+  private static final String HOST = "192.168.10.177";
 
   @BeforeClass
   public static void setupTests() throws Exception {
-    client = new MongoClient();
+
+    client = new MongoClient(HOST);
     MongoDatabase testDB = client.getDatabase("test");
     MongoCollection<Document> zipsCollection = testDB.getCollection("zips");
     zipsCollection.drop();
@@ -66,7 +68,7 @@ public class ZipsAggregationLiveTest {
 
   @AfterClass
   public static void tearDown() throws Exception {
-    client = new MongoClient();
+    client = new MongoClient(HOST);
     MongoDatabase testDB = client.getDatabase("test");
     MongoCollection<Document> zipsCollection = testDB.getCollection("zips");
     zipsCollection.drop();

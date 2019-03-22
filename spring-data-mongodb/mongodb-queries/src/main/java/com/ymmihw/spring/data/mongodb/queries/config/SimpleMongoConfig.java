@@ -11,7 +11,7 @@ import com.mongodb.MongoClient;
 public class SimpleMongoConfig {
 
   private MongoClient mongo() throws Exception {
-    return new MongoClient("localhost");
+    return new MongoClient("192.168.10.177");
   }
 
   @Bean

@@ -29,4 +29,12 @@
    </plugin>
   </plugins>
  </build>
+ <modules>
+  <module>spring-data-rest-events</module>
+  <module>spring-data-rest-hal</module>
+  <module>spring-data-rest-introduction</module>
+  <module>spring-data-rest-projections</module>
+  <module>spring-data-rest-relationships</module>
+  <module>spring-data-rest-validator</module>
+ </modules>
 </project>

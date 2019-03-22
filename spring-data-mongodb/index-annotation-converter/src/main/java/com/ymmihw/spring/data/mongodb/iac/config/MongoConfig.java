@@ -35,6 +35,6 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
   @Override
   public MongoClient mongoClient() {
-    return new MongoClient("localhost");
+    return new MongoClient("192.168.10.177");
   }
 }

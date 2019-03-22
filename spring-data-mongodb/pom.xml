@@ -34,4 +34,12 @@
    <scope>test</scope>
   </dependency>
  </dependencies>
+ <modules>
+  <module>index-annotation-converter</module>
+  <module>mongodb-custom-cascading</module>
+  <module>mongodb-gridfs</module>
+  <module>mongodb-introduction</module>
+  <module>mongodb-projection-aggregation</module>
+  <module>mongodb-queries</module>
+ </modules>
 </project>
