@@ -37,4 +37,7 @@
    <artifactId>spring-boot-starter-data-neo4j</artifactId>
   </dependency>
  </dependencies>
+ <modules>
+  <module>spring-data-neo4j-intro</module>
+ </modules>
 </project>

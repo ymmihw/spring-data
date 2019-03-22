@@ -30,4 +30,10 @@
    <scope>test</scope>
   </dependency>
  </dependencies>
+
+ <modules>
+  <module>spring-data-elasticsearch-introduction</module>
+  <module>spring-data-elasticsearch-queries</module>
+  <module>spring-data-elasticsearch-tags</module>
+ </modules>
 </project>

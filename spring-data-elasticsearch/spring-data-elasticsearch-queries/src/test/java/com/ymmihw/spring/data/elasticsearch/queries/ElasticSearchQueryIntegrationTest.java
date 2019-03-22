@@ -21,8 +21,8 @@ import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.junit.Before;
 import org.junit.Test;
@@ -151,7 +151,7 @@ public class ElasticSearchQueryIntegrationTest {
   @Test
   public void givenNotAnalyzedQuery_whenMakeAggregationOnTermCount_thenEachTermCountsIndividually() {
     final TermsAggregationBuilder aggregation =
-        AggregationBuilders.terms("top_tags").field("tags").order(Terms.Order.count(false));
+        AggregationBuilders.terms("top_tags").field("tags").order(BucketOrder.count(false));
     final SearchResponse response = client.prepareSearch("blog").setTypes("article")
         .addAggregation(aggregation).execute().actionGet();
 

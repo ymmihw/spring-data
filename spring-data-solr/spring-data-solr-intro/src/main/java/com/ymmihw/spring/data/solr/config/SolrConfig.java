@@ -13,7 +13,8 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 public class SolrConfig {
   @Bean
   public SolrClient solrClient() {
-    return new HttpSolrClient.Builder().withBaseSolrUrl("http://192.168.1.101:8983/solr").build();
+    return new HttpSolrClient.Builder().withBaseSolrUrl("http://192.168.10.177:8983/solr/")
+        .build();
   }
 
   @Bean

@@ -34,4 +34,8 @@
    <scope>test</scope>
   </dependency>
  </dependencies>
+ <modules>
+  <module>spring-data-redis-introduction</module>
+  <module>spring-data-redis-pubsub</module>
+ </modules>
 </project>

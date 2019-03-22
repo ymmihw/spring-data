@@ -13,7 +13,7 @@ import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 public class MovieDatabaseNeo4jConfiguration {
 
   public static final String URL = System.getenv("NEO4J_URL") != null ? System.getenv("NEO4J_URL")
-      : "http://neo4j:movies@localhost:7474";
+      : "http://neo4j:123456@192.168.10.177:7474";
 
   @Bean
   public org.neo4j.ogm.config.Configuration configuration() {
