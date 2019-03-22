@@ -18,7 +18,6 @@
  <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
  </properties>
-
  <dependencies>
   <dependency>
    <groupId>org.springframework.boot</groupId>
@@ -34,4 +33,13 @@
    <artifactId>h2</artifactId>
   </dependency>
  </dependencies>
+ <modules>
+  <module>advanced-tagging</module>
+  <module>composable-repositories</module>
+  <module>query-annotation</module>
+  <module>query-by-date-and-time</module>
+  <module>simple-tagging</module>
+  <module>spring-data-jpa-multiple-databases</module>
+  <module>with-spring-security</module>
+ </modules>
 </project>

@@ -26,6 +26,7 @@
   </dependency>
  </dependencies>
  <modules>
+  <module>spring-data-jpa</module>
   <module>spring-data-elasticsearch</module>
   <module>spring-data-redis</module>
   <module>spring-data-solr</module>
