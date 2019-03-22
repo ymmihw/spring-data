@@ -22,4 +22,7 @@
    <artifactId>spring-data-keyvalue</artifactId>
   </dependency>
  </dependencies>
+ <modules>
+  <module>spring-data-keyvalue-intro</module>
+ </modules>
 </project>
