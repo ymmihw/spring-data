@@ -18,4 +18,7 @@
  </properties>
  <dependencies>
  </dependencies>
+ <modules>
+  <module>spring-data-ldap-intro</module>
+ </modules>
 </project>

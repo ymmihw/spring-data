@@ -30,5 +30,6 @@
   <module>spring-data-redis</module>
   <module>spring-data-solr</module>
   <module>spring-data-neo4j</module>
+  <module>spring-data-ldap</module>
  </modules>
 </project>
