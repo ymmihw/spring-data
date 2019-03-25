@@ -41,5 +41,6 @@
   <module>mongodb-introduction</module>
   <module>mongodb-projection-aggregation</module>
   <module>mongodb-queries</module>
+  <module>mongodb-reactive</module>
  </modules>
 </project>

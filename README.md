@@ -41,6 +41,7 @@ index-annotation-converter | [Spring Data MongoDB – Indexes, Annotations and C
 mongodb-custom-cascading | [Custom Cascading in Spring Data MongoDB](http://www.baeldung.com/cascading-with-dbref-and-lifecycle-events-in-spring-data-mongodb)
 mongodb-gridfs | [GridFS in Spring Data MongoDB](http://www.baeldung.com/spring-data-mongodb-gridfs)
 mongodb-projection-aggregation | [Spring Data MongoDB: Projections and Aggregations](http://www.baeldung.com/spring-data-mongodb-projections-aggregations)
+mongodb-reactive | [Spring Data Reactive Repositories with MongoDB](https://www.baeldung.com/spring-data-mongodb-reactive)
 ---
 ### Spring Data Elasticsearch
 Module | Article
