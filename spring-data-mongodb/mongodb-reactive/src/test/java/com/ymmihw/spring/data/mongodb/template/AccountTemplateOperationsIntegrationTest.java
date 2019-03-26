@@ -4,10 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.ymmihw.spring.data.mongodb.Spring5ReactiveApplication;
 import com.ymmihw.spring.data.mongodb.model.Account;
@@ -15,12 +16,16 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = Spring5ReactiveApplication.class)
+@ContextConfiguration(classes = Spring5ReactiveApplication.class)
 public class AccountTemplateOperationsIntegrationTest {
 
   @Autowired
   AccountTemplateOperations accountTemplate;
+
+  @Before
+  public void before() {
+    accountTemplate.deleteAll();
+  }
 
   @Test
   public void givenAccount_whenSave_thenSave() {

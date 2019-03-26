@@ -3,26 +3,31 @@ package com.ymmihw.spring.data.mongodb.repository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.startsWith;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.ymmihw.spring.data.mongodb.Spring5ReactiveApplication;
+import com.ymmihw.spring.data.mongodb.config.MongoReactiveConfig;
 import com.ymmihw.spring.data.mongodb.model.Account;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = Spring5ReactiveApplication.class)
+@ContextConfiguration(classes = MongoReactiveConfig.class)
 public class AccountMongoRepositoryIntegrationTest {
 
   @Autowired
   AccountMongoRepository repository;
+
+  @Before
+  public void before() {
+    repository.deleteAll().block();
+  }
 
   @Test
   public void givenExample_whenFindAllWithExample_thenFindAllMacthings() {
