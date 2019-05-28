@@ -29,8 +29,13 @@
    <artifactId>spring-boot-starter-test</artifactId>
    <scope>test</scope>
   </dependency>
+  <dependency>
+   <groupId>org.testcontainers</groupId>
+   <artifactId>elasticsearch</artifactId>
+   <version>1.11.3</version>
+   <scope>test</scope>
+  </dependency>
  </dependencies>
-
  <modules>
   <module>spring-data-elasticsearch-introduction</module>
   <module>spring-data-elasticsearch-queries</module>

@@ -8,26 +8,69 @@ import static org.elasticsearch.index.query.QueryBuilders.regexpQuery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.ymmihw.spring.data.elasticsearch.introduction.config.Config;
+import com.ymmihw.spring.data.elasticsearch.introduction.ElasticSearchIntegrationTest.DockerConfig;
 import com.ymmihw.spring.data.elasticsearch.introduction.model.Article;
 import com.ymmihw.spring.data.elasticsearch.introduction.model.Author;
 import com.ymmihw.spring.data.elasticsearch.introduction.service.ArticleService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Config.class)
+@ContextConfiguration(classes = DockerConfig.class)
 public class ElasticSearchIntegrationTest {
+
+  @ClassRule
+  public static MyElasticsearchContainer container = MyElasticsearchContainer.getInstance();
+
+  @Configuration
+  @EnableElasticsearchRepositories(
+      basePackages = "com.ymmihw.spring.data.elasticsearch.introduction.repository")
+  @ComponentScan(basePackages = {"com.ymmihw.spring.data.elasticsearch.introduction.service"})
+  public static class DockerConfig {
+
+    @Bean
+    public Client client() {
+      Settings settings = Settings.builder().put("client.transport.sniff", false).build();
+      PreBuiltTransportClient preBuiltTransportClient = new PreBuiltTransportClient(settings);
+      try {
+        TransportClient addTransportAddress = preBuiltTransportClient.addTransportAddress(
+            new TransportAddress(InetAddress.getByName(container.getContainerIpAddress()),
+                container.getMappedPort(9300)));
+        return addTransportAddress;
+      } catch (final UnknownHostException ioex) {
+        throw new RuntimeException(ioex);
+      }
+
+    }
+
+    @Bean
+    public ElasticsearchOperations elasticsearchTemplate() {
+      return new ElasticsearchTemplate(client());
+    }
+  }
 
   @Autowired
   private ElasticsearchTemplate elasticsearchTemplate;
