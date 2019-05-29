@@ -10,12 +10,17 @@ import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.junit.Assert.assertEquals;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -24,23 +29,60 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.ymmihw.spring.data.elasticsearch.queries.config.Config;
+import com.ymmihw.spring.data.elasticsearch.queries.ElasticSearchQueryIntegrationTest.DockerConfig;
 import com.ymmihw.spring.data.elasticsearch.queries.model.Article;
 import com.ymmihw.spring.data.elasticsearch.queries.model.Author;
 import com.ymmihw.spring.data.elasticsearch.queries.service.ArticleService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Config.class)
+@ContextConfiguration(classes = DockerConfig.class)
 public class ElasticSearchQueryIntegrationTest {
+
+  @ClassRule
+  public static MyElasticsearchContainer container = MyElasticsearchContainer.getInstance();
+
+  @Configuration
+  @EnableElasticsearchRepositories(
+      basePackages = "com.ymmihw.spring.data.elasticsearch.queries.repository")
+  @ComponentScan(basePackages = {"com.ymmihw.spring.data.elasticsearch.queries.service"})
+  public static class DockerConfig {
+
+    @Bean
+    public Client client() {
+      Settings settings = Settings.builder().put("client.transport.sniff", false).build();
+      PreBuiltTransportClient preBuiltTransportClient = new PreBuiltTransportClient(settings);
+      try {
+        TransportClient addTransportAddress = preBuiltTransportClient.addTransportAddress(
+            new TransportAddress(InetAddress.getByName(container.getContainerIpAddress()),
+                container.getMappedPort(9300)));
+        return addTransportAddress;
+      } catch (final UnknownHostException ioex) {
+        throw new RuntimeException(ioex);
+      }
+
+    }
+
+    @Bean
+    public ElasticsearchOperations elasticsearchTemplate() {
+      return new ElasticsearchTemplate(client());
+    }
+  }
 
   @Autowired
   private ElasticsearchTemplate elasticsearchTemplate;
