@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,15 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.ymmihw.spring.data.mongodb.introduction.config.SimpleMongoConfig;
+import com.ymmihw.spring.data.mongodb.introduction.BaseTest;
 import com.ymmihw.spring.data.mongodb.introduction.model.User;
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SimpleMongoConfig.class)
-public class UserRepositoryLiveTest {
-
+public class UserRepositoryLiveTest extends BaseTest {
   @Autowired
   private UserRepository userRepository;
 
@@ -150,7 +143,7 @@ public class UserRepositoryLiveTest {
     user.setName("Adam");
     mongoOps.insert(user);
 
-    final Pageable pageableRequest = new PageRequest(0, 1);
+    final Pageable pageableRequest = PageRequest.of(0, 1);
 
     final Page<User> page = userRepository.findAll(pageableRequest);
     List<User> users = page.getContent();

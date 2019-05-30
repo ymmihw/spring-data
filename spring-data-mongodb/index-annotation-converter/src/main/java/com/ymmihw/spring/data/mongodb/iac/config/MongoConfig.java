@@ -2,6 +2,7 @@ package com.ymmihw.spring.data.mongodb.iac.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -15,6 +16,9 @@ import com.ymmihw.spring.data.mongodb.iac.event.CascadeSaveMongoEventListener;
 @Configuration
 @EnableMongoRepositories(basePackages = "com.ymmihw.spring.data.mongodb.iac.repository")
 public class MongoConfig extends AbstractMongoConfiguration {
+
+  @Autowired
+  private MongoClient mongoClient;
 
   @Override
   public MongoCustomConversions customConversions() {
@@ -35,6 +39,6 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
   @Override
   public MongoClient mongoClient() {
-    return new MongoClient("192.168.10.177");
+    return mongoClient;
   }
 }

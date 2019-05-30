@@ -1,5 +1,6 @@
 package com.ymmihw.spring.data.mongodb.gridfs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
@@ -8,7 +9,8 @@ import com.mongodb.MongoClient;
 
 @Configuration
 public class MongoConfig extends AbstractMongoConfiguration {
-
+  @Autowired
+  private MongoClient mongoClient;
 
   @Override
   protected String getDatabaseName() {
@@ -27,6 +29,6 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
   @Override
   public MongoClient mongoClient() {
-    return new MongoClient("192.168.10.177", 27017);
+    return mongoClient;
   }
 }

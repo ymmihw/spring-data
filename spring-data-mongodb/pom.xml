@@ -33,6 +33,12 @@
    <artifactId>spring-boot-starter-test</artifactId>
    <scope>test</scope>
   </dependency>
+  <dependency>
+   <groupId>com.ymmihw.spring.data.mongodb</groupId>
+   <artifactId>mongodb-container</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <scope>test</scope>
+  </dependency>
  </dependencies>
  <modules>
   <module>index-annotation-converter</module>
@@ -42,5 +48,6 @@
   <module>mongodb-projection-aggregation</module>
   <module>mongodb-queries</module>
   <module>mongodb-reactive</module>
+  <module>mongodb-container</module>
  </modules>
 </project>

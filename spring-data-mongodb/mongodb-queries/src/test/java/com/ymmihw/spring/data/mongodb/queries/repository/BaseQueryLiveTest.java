@@ -4,9 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
+import com.ymmihw.spring.data.mongodb.queries.BaseTest;
 import com.ymmihw.spring.data.mongodb.queries.model.User;
 
-public class BaseQueryLiveTest {
+public class BaseQueryLiveTest extends BaseTest {
 
   @Autowired
   protected UserRepository userRepository;

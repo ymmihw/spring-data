@@ -20,7 +20,6 @@ import org.bson.Document;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -33,28 +32,23 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.ymmihw.spring.data.mongodb.pa.config.SimpleMongoConfig;
+import com.ymmihw.spring.data.mongodb.pa.BaseTest;
 import com.ymmihw.spring.data.mongodb.pa.model.StatePopulation;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SimpleMongoConfig.class)
-public class ZipsAggregationLiveTest {
+public class ZipsAggregationLiveTest extends BaseTest {
 
   private static MongoClient client;
 
   @Autowired
   private MongoTemplate mongoTemplate;
-  private static final String HOST = "192.168.10.177";
 
   @BeforeClass
   public static void setupTests() throws Exception {
 
-    client = new MongoClient(HOST);
+    client = new MongoClient(container.getContainerIpAddress(), container.getFirstMappedPort());
     MongoDatabase testDB = client.getDatabase("test");
     MongoCollection<Document> zipsCollection = testDB.getCollection("zips");
     zipsCollection.drop();
@@ -68,7 +62,7 @@ public class ZipsAggregationLiveTest {
 
   @AfterClass
   public static void tearDown() throws Exception {
-    client = new MongoClient(HOST);
+    client = new MongoClient(container.getContainerIpAddress(), container.getFirstMappedPort());
     MongoDatabase testDB = client.getDatabase("test");
     MongoCollection<Document> zipsCollection = testDB.getCollection("zips");
     zipsCollection.drop();

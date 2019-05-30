@@ -4,18 +4,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.querydsl.core.types.Predicate;
-import com.ymmihw.spring.data.mongodb.queries.config.SimpleMongoConfig;
 import com.ymmihw.spring.data.mongodb.queries.model.QUser;
 import com.ymmihw.spring.data.mongodb.queries.model.User;
 
-
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SimpleMongoConfig.class)
 public class DSLQueryLiveTest extends BaseQueryLiveTest {
 
   @Test

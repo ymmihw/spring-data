@@ -4,18 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import com.ymmihw.spring.data.mongodb.config.MongoReactiveConfig;
+import com.ymmihw.spring.data.mongodb.BaseTest;
 import com.ymmihw.spring.data.mongodb.model.Account;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = MongoReactiveConfig.class)
-public class AccountRxJavaRepositoryIntegrationTest {
+public class AccountRxJavaRepositoryIntegrationTest extends BaseTest {
 
   @Autowired
   AccountRxJavaRepository repository;

@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,11 +11,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.bson.Document;
 import org.junit.After;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
@@ -25,15 +27,31 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.gridfs.GridFSFindIterable;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import com.ymmihw.spring.data.mongodb.MongoContainer;
+import com.ymmihw.spring.data.mongodb.gridfs.GridFSLiveTest.MongoClientDockerConfig;
 
-@ContextConfiguration(classes = MongoConfig.class)
+@ContextConfiguration(classes = {MongoConfig.class, MongoClientDockerConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class GridFSLiveTest {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
+  @ClassRule
+  public static MongoContainer container = MongoContainer.getInstance();
+
+  @Configuration
+  public static class MongoClientDockerConfig {
+    @Bean
+    public MongoClient mongo() throws Exception {
+      ServerAddress addr =
+          new ServerAddress(container.getContainerIpAddress(), container.getFirstMappedPort());
+      return new MongoClient(addr);
+    }
+  }
 
   @Autowired
   private GridFsTemplate gridFsTemplate;
