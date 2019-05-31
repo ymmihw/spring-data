@@ -4,19 +4,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import java.util.List;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ymmihw.spring.data.solr.config.SolrConfig;
 import com.ymmihw.spring.data.solr.model.Product;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SolrConfig.class)
+@TestPropertySource(properties = {"solr.host=${SOLR_HOST}", "solr.port=${SOLR_PORT}"})
 public class ProductRepositoryLiveTest {
+  @ClassRule
+  public static SolrContainer container = SolrContainer.getInstance();
 
   @Autowired
   private ProductRepository productRepository;
