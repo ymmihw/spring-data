@@ -38,5 +38,6 @@
   <module>spring-data-redis-introduction</module>
   <module>spring-data-redis-pubsub</module>
   <module>spring-data-redis-reactive</module>
+  <module>redis-container</module>
  </modules>
 </project>

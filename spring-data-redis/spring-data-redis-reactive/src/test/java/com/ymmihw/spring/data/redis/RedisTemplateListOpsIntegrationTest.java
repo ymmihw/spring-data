@@ -3,19 +3,13 @@ package com.ymmihw.spring.data.redis;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.ReactiveListOperations;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = SpringRedisReactiveApplication.class)
-public class RedisTemplateListOpsIntegrationTest {
+public class RedisTemplateListOpsIntegrationTest extends BaseTest {
 
   private static final String LIST_NAME = "demo_list";
 

@@ -19,7 +19,7 @@ import com.ymmihw.spring.data.redis.model.Employee;
 public class RedisConfig {
 
   @Autowired
-  RedisConnectionFactory factory;
+  private RedisConnectionFactory factory;
 
   @Bean
   public ReactiveRedisTemplate<String, Employee> reactiveRedisTemplate(

@@ -4,20 +4,14 @@ package com.ymmihw.spring.data.redis;
 import java.time.Duration;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.ReactiveValueOperations;
-import org.springframework.test.context.junit4.SpringRunner;
 import com.ymmihw.spring.data.redis.model.Employee;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = SpringRedisReactiveApplication.class)
-public class RedisTemplateValueOpsIntegrationTest {
+public class RedisTemplateValueOpsIntegrationTest extends BaseTest {
 
   @Autowired
   private ReactiveRedisTemplate<String, Employee> redisTemplate;

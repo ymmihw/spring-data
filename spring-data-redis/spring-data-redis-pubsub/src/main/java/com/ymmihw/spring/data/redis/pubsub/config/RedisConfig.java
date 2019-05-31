@@ -1,5 +1,6 @@
 package com.ymmihw.spring.data.redis.pubsub.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +18,16 @@ import com.ymmihw.spring.data.redis.pubsub.queue.RedisMessageSubscriber;
 @Configuration
 @ComponentScan("com.ymmihw.spring.data.redis.pubsub")
 public class RedisConfig {
+  @Value("${redis.host:127.0.0.1}")
+  private String redisHost;
+  @Value("${redis.port:6379}")
+  private int redisPort;
 
   @Bean
   JedisConnectionFactory jedisConnectionFactory() {
     RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
-    config.setHostName("192.168.10.177");
-    config.setPort(6379);
+    config.setHostName(redisHost);
+    config.setPort(redisPort);
     JedisConnectionFactory jedisConFactory = new JedisConnectionFactory(config);
     return jedisConFactory;
   }

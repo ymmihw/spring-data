@@ -34,5 +34,11 @@
    <artifactId>reactor-test</artifactId>
    <scope>test</scope>
   </dependency>
+  <dependency>
+   <groupId>com.ymmihw.spring.data.redis</groupId>
+   <artifactId>redis-container</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <scope>test</scope>
+  </dependency>
  </dependencies>
 </project>

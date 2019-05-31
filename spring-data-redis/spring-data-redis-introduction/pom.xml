@@ -15,5 +15,11 @@
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
  </properties>
  <dependencies>
+  <dependency>
+   <groupId>com.ymmihw.spring.data.redis</groupId>
+   <artifactId>redis-container</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <scope>test</scope>
+  </dependency>
  </dependencies>
 </project>

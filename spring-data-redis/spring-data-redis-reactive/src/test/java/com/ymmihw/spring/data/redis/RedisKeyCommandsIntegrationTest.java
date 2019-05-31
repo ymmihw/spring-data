@@ -3,21 +3,15 @@ package com.ymmihw.spring.data.redis;
 
 import java.nio.ByteBuffer;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.ReactiveKeyCommands;
 import org.springframework.data.redis.connection.ReactiveStringCommands;
 import org.springframework.data.redis.connection.ReactiveStringCommands.SetCommand;
-import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = SpringRedisReactiveApplication.class)
-public class RedisKeyCommandsIntegrationTest {
+public class RedisKeyCommandsIntegrationTest extends BaseTest {
 
   @Autowired
   private ReactiveKeyCommands keyCommands;
