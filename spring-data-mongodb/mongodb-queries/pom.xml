@@ -24,6 +24,12 @@
    <artifactId>querydsl-apt</artifactId>
    <scope>provided</scope>
   </dependency>
+  <dependency>
+   <groupId>com.ymmihw.spring.data.mongodb</groupId>
+   <artifactId>mongodb-container</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <scope>test</scope>
+  </dependency>
  </dependencies>
  <build>
   <plugins>
