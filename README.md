@@ -74,3 +74,9 @@ spring-data-solr-intro | [Introduction to Spring Data Solr](https://www.baeldung
 Module | Article
 --|--
 spring-data-neo4j-intro | [Introduction to Spring Data Neo4j](http://www.baeldung.com/spring-data-neo4j-intro)
+
+### spring-data-cassandra
+
+Module | Article
+--|--
+spring-data-cassandra-intro | [Introduction to Spring Data Cassandra](https://www.baeldung.com/spring-data-cassandra-tutorial)
