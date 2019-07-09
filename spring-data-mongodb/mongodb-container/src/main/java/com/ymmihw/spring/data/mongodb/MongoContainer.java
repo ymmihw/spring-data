@@ -22,7 +22,7 @@ public class MongoContainer extends GenericContainer<MongoContainer> {
     super.addExposedPort(27017);
     super.start();
     System.setProperty("redis.host", container.getContainerIpAddress());
-    System.setProperty("redis.port", container.getfir);
+    System.setProperty("redis.port", String.valueOf(container.getFirstMappedPort()));
   }
 
 
