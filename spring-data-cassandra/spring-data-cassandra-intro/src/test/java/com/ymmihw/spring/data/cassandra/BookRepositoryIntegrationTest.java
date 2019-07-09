@@ -74,7 +74,7 @@ public class BookRepositoryIntegrationTest {
     final Book javaBook =
         new Book(new BookKey(UUIDs.timeBased(), "Head First Java", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
-    bookRepository.saveAll(ImmutableSet.of(javaBook));
+    bookRepository.save(javaBook);
     final Iterable<Book> books =
         bookRepository.findByTitleAndPublisher("Head First Java", "O'Reilly Media");
     assertEquals(javaBook.getId(), books.iterator().next().getId());
@@ -85,11 +85,11 @@ public class BookRepositoryIntegrationTest {
     final Book javaBook =
         new Book(new BookKey(UUIDs.timeBased(), "Head First Java", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
-    bookRepository.saveAll(ImmutableSet.of(javaBook));
+    bookRepository.save(javaBook);
     final Iterable<Book> books =
         bookRepository.findByTitleAndPublisher("Head First Java", "O'Reilly Media");
     javaBook.setTitle("Head First Java Second Edition");
-    bookRepository.saveAll(ImmutableSet.of(javaBook));
+    bookRepository.save(javaBook);
     final Iterable<Book> updateBooks =
         bookRepository.findByTitleAndPublisher("Head First Java Second Edition", "O'Reilly Media");
     assertEquals(javaBook.getTitle(), updateBooks.iterator().next().getTitle());
@@ -100,7 +100,7 @@ public class BookRepositoryIntegrationTest {
     final Book javaBook =
         new Book(new BookKey(UUIDs.timeBased(), "Head First Java", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
-    bookRepository.saveAll(ImmutableSet.of(javaBook));
+    bookRepository.save(javaBook);
     bookRepository.delete(javaBook);
     final Iterable<Book> books =
         bookRepository.findByTitleAndPublisher("Head First Java", "O'Reilly Media");
@@ -115,8 +115,7 @@ public class BookRepositoryIntegrationTest {
     final Book dPatternBook =
         new Book(new BookKey(UUIDs.timeBased(), "Head Design Patterns", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
-    bookRepository.saveAll(ImmutableSet.of(javaBook));
-    bookRepository.saveAll(ImmutableSet.of(dPatternBook));
+    bookRepository.saveAll(ImmutableSet.of(javaBook, dPatternBook));
     final Iterable<Book> books = bookRepository.findAll();
     int bookCount = 0;
     for (final Book book : books) {
