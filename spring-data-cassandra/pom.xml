@@ -19,5 +19,6 @@
  </dependencies>
  <modules>
   <module>spring-data-cassandra-intro</module>
+  <module>spring-data-cassandra-template-cql</module>
  </modules>
 </project>

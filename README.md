@@ -80,3 +80,4 @@ spring-data-neo4j-intro | [Introduction to Spring Data Neo4j](http://www.baeldun
 Module | Article
 --|--
 spring-data-cassandra-intro | [Introduction to Spring Data Cassandra](https://www.baeldung.com/spring-data-cassandra-tutorial)
+spring-data-cassandra-template-cql | [Using the CassandraTemplate from Spring Data](https://www.baeldung.com/spring-data-cassandratemplate-cqltemplate)
