@@ -43,6 +43,7 @@ mongodb-gridfs | [GridFS in Spring Data MongoDB](http://www.baeldung.com/spring-
 mongodb-projection-aggregation | [Spring Data MongoDB: Projections and Aggregations](http://www.baeldung.com/spring-data-mongodb-projections-aggregations)
 mongodb-reactive | [Spring Data Reactive Repositories with MongoDB](https://www.baeldung.com/spring-data-mongodb-reactive)
 spring-data-mongodb-transaction | [Spring Data MongoDB Transactions](https://www.baeldung.com/spring-data-mongodb-transactions)
+spring-data-mongodb-converter | [ZonedDateTime with Spring Data MongoDB](https://www.baeldung.com/spring-data-mongodb-zoneddatetime)
 
 ---
 ### Spring Data Elasticsearch

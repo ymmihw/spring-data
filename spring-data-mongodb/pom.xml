@@ -5,7 +5,6 @@
 
  <groupId>com.ymmihw</groupId>
  <artifactId>spring-data-mongodb</artifactId>
- <version>0.0.1-SNAPSHOT</version>
  <packaging>pom</packaging>
 
  <name>spring-data-mongodb</name>
@@ -35,14 +34,15 @@
   </dependency>
  </dependencies>
  <modules>
-<!--   <module>index-annotation-converter</module> -->
-<!--   <module>mongodb-custom-cascading</module> -->
-<!--   <module>mongodb-gridfs</module> -->
-<!--   <module>mongodb-introduction</module> -->
-<!--   <module>mongodb-projection-aggregation</module> -->
-<!--   <module>mongodb-queries</module> -->
-<!--   <module>mongodb-reactive</module> -->
-<!--   <module>mongodb-container</module> -->
+  <!-- <module>index-annotation-converter</module> -->
+  <!-- <module>mongodb-custom-cascading</module> -->
+  <!-- <module>mongodb-gridfs</module> -->
+  <!-- <module>mongodb-introduction</module> -->
+  <!-- <module>mongodb-projection-aggregation</module> -->
+  <!-- <module>mongodb-queries</module> -->
+  <!-- <module>mongodb-reactive</module> -->
+  <!-- <module>mongodb-container</module> -->
   <module>spring-data-mongodb-transaction</module>
+  <module>spring-data-mongodb-converter</module>
  </modules>
 </project>
