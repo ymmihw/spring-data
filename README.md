@@ -44,6 +44,7 @@ mongodb-projection-aggregation | [Spring Data MongoDB: Projections and Aggregati
 mongodb-reactive | [Spring Data Reactive Repositories with MongoDB](https://www.baeldung.com/spring-data-mongodb-reactive)
 spring-data-mongodb-transaction | [Spring Data MongoDB Transactions](https://www.baeldung.com/spring-data-mongodb-transactions)
 spring-data-mongodb-converter | [ZonedDateTime with Spring Data MongoDB](https://www.baeldung.com/spring-data-mongodb-zoneddatetime)
+spring-data-mongodb-auto-generated-field | [Auto-Generated Field for MongoDB using Spring Boot](https://www.baeldung.com/spring-boot-mongodb-auto-generated-field)
 
 ---
 ### Spring Data Elasticsearch
