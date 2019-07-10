@@ -35,13 +35,14 @@
   </dependency>
  </dependencies>
  <modules>
-  <module>index-annotation-converter</module>
-  <module>mongodb-custom-cascading</module>
-  <module>mongodb-gridfs</module>
-  <module>mongodb-introduction</module>
-  <module>mongodb-projection-aggregation</module>
-  <module>mongodb-queries</module>
-  <module>mongodb-reactive</module>
-  <module>mongodb-container</module>
+<!--   <module>index-annotation-converter</module> -->
+<!--   <module>mongodb-custom-cascading</module> -->
+<!--   <module>mongodb-gridfs</module> -->
+<!--   <module>mongodb-introduction</module> -->
+<!--   <module>mongodb-projection-aggregation</module> -->
+<!--   <module>mongodb-queries</module> -->
+<!--   <module>mongodb-reactive</module> -->
+<!--   <module>mongodb-container</module> -->
+  <module>spring-data-mongodb-transaction</module>
  </modules>
 </project>

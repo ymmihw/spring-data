@@ -42,6 +42,8 @@ mongodb-custom-cascading | [Custom Cascading in Spring Data MongoDB](http://www.
 mongodb-gridfs | [GridFS in Spring Data MongoDB](http://www.baeldung.com/spring-data-mongodb-gridfs)
 mongodb-projection-aggregation | [Spring Data MongoDB: Projections and Aggregations](http://www.baeldung.com/spring-data-mongodb-projections-aggregations)
 mongodb-reactive | [Spring Data Reactive Repositories with MongoDB](https://www.baeldung.com/spring-data-mongodb-reactive)
+spring-data-mongodb-transaction | [Spring Data MongoDB Transactions](https://www.baeldung.com/spring-data-mongodb-transactions)
+
 ---
 ### Spring Data Elasticsearch
 Module | Article
