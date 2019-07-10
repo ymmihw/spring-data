@@ -20,5 +20,6 @@
  <modules>
   <module>spring-data-cassandra-intro</module>
   <module>spring-data-cassandra-template-cql</module>
+  <module>spring-data-cassandra-reactive</module>
  </modules>
 </project>

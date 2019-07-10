@@ -81,3 +81,4 @@ Module | Article
 --|--
 spring-data-cassandra-intro | [Introduction to Spring Data Cassandra](https://www.baeldung.com/spring-data-cassandra-tutorial)
 spring-data-cassandra-template-cql | [Using the CassandraTemplate from Spring Data](https://www.baeldung.com/spring-data-cassandratemplate-cqltemplate)
+spring-data-cassandra-reactive | [Spring Data with Reactive Cassandra](https://www.baeldung.com/spring-data-cassandra-reactive)
