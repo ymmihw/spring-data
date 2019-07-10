@@ -1,6 +1,7 @@
 package com.ymmihw.spring.data.mongodb;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import java.util.List;
@@ -50,7 +51,8 @@ public class MongoTransactionalLiveTest extends BaseTest {
   public void whenCountDuringMongoTransaction_thenException() {
     userRepository.save(new User("John", 30));
     userRepository.save(new User("Ringo", 35));
-    userRepository.count();
+    long count = userRepository.count();
+    assertEquals(2, count);
   }
 
   @Test

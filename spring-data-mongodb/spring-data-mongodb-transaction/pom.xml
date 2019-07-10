@@ -9,7 +9,6 @@
  </parent>
  <groupId>com.ymmihw.spring.data.mongodb</groupId>
  <artifactId>spring-data-mongodb-transaction</artifactId>
- <version>0.0.1-SNAPSHOT</version>
  <name>spring-data-mongodb-transaction</name>
  <url>http://maven.apache.org</url>
  <properties>
