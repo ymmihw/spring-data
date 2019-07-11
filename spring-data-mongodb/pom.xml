@@ -41,5 +41,6 @@
   <module>spring-data-mongodb-transaction</module>
   <module>spring-data-mongodb-converter</module>
   <module>spring-data-mongodb-auto-generated-field</module>
+  <module>spring-data-mongodb-tailable-cursor</module>
  </modules>
 </project>
