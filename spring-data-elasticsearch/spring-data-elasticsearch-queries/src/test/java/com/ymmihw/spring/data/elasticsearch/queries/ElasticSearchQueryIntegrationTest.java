@@ -36,32 +36,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.ymmihw.spring.data.elasticsearch.queries.ElasticSearchQueryIntegrationTest.DockerConfig;
+import com.github.dockerjava.api.DockerClient;
+import com.ymmihw.spring.data.elasticsearch.MyElasticsearchContainer;
+import com.ymmihw.spring.data.elasticsearch.queries.config.Config;
 import com.ymmihw.spring.data.elasticsearch.queries.model.Article;
 import com.ymmihw.spring.data.elasticsearch.queries.model.Author;
 import com.ymmihw.spring.data.elasticsearch.queries.service.ArticleService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DockerConfig.class)
+@ContextConfiguration(classes = {Config.class, DockerClient.class})
 public class ElasticSearchQueryIntegrationTest {
 
   @ClassRule
   public static MyElasticsearchContainer container = MyElasticsearchContainer.getInstance();
 
   @Configuration
-  @EnableElasticsearchRepositories(
-      basePackages = "com.ymmihw.spring.data.elasticsearch.queries.repository")
-  @ComponentScan(basePackages = {"com.ymmihw.spring.data.elasticsearch.queries.service"})
-  public static class DockerConfig {
+  public static class DockerClient {
 
     @Bean
     public Client client() {
@@ -76,11 +72,6 @@ public class ElasticSearchQueryIntegrationTest {
         throw new RuntimeException(ioex);
       }
 
-    }
-
-    @Bean
-    public ElasticsearchOperations elasticsearchTemplate() {
-      return new ElasticsearchTemplate(client());
     }
   }
 

@@ -1,4 +1,4 @@
-package com.ymmihw.spring.data.elasticsearch.introduction;
+package com.ymmihw.spring.data.elasticsearch;
 
 import java.util.List;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;

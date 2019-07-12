@@ -19,32 +19,27 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.ymmihw.spring.data.elasticsearch.tags.ElasticSearchIntegrationTest.DockerConfig;
+import com.ymmihw.spring.data.elasticsearch.MyElasticsearchContainer;
+import com.ymmihw.spring.data.elasticsearch.tags.ElasticSearchIntegrationTest.DockerClient;
+import com.ymmihw.spring.data.elasticsearch.tags.config.Config;
 import com.ymmihw.spring.data.elasticsearch.tags.model.Article;
 import com.ymmihw.spring.data.elasticsearch.tags.model.Author;
 import com.ymmihw.spring.data.elasticsearch.tags.service.ArticleService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DockerConfig.class)
+@ContextConfiguration(classes = {DockerClient.class, Config.class})
 public class ElasticSearchIntegrationTest {
   @ClassRule
   public static MyElasticsearchContainer container = MyElasticsearchContainer.getInstance();
 
   @Configuration
-  @EnableElasticsearchRepositories(
-      basePackages = "com.ymmihw.spring.data.elasticsearch.tags.repository")
-  @ComponentScan(basePackages = {"com.ymmihw.spring.data.elasticsearch.tags.service"})
-  public static class DockerConfig {
-
+  public static class DockerClient {
     @Bean
     public Client client() {
       Settings settings = Settings.builder().put("client.transport.sniff", false).build();
@@ -58,11 +53,6 @@ public class ElasticSearchIntegrationTest {
         throw new RuntimeException(ioex);
       }
 
-    }
-
-    @Bean
-    public ElasticsearchOperations elasticsearchTemplate() {
-      return new ElasticsearchTemplate(client());
     }
   }
 
