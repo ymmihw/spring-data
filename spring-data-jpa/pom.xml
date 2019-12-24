@@ -41,5 +41,6 @@
   <module>simple-tagging</module>
   <module>spring-data-jpa-multiple-databases</module>
   <module>with-spring-security</module>
+  <module>spring-data-jpa-entity-graph</module>
  </modules>
 </project>

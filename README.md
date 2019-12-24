@@ -24,7 +24,9 @@ query-annotation | [Spring Data JPA @Query](http://www.baeldung.com/spring-data-
 spring-data-jpa-multiple-databases | [Spring JPA – Multiple Databases](http://www.baeldung.com/spring-data-jpa-multiple-databases)
 composable-repositories | [Spring Data Composable Repositories](https://www.baeldung.com/spring-data-composable-repositories)
 query-by-date-and-time | [Query Entities by Dates and Times with Spring Data JPA](https://www.baeldung.com/spring-data-jpa-query-by-date)
+spring-data-jpa-entity-graph | [Spring Data JPA and Named Entity Graphs](https://www.baeldung.com/spring-data-jpa-named-entity-graphs)
 ---
+
 ### Spring Data Redis
 Module | Article
 --|--
