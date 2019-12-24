@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import com.ymmihw.spring.data.mongodb.introduction.BaseTest;
 import com.ymmihw.spring.data.mongodb.introduction.model.User;
+
 public class UserRepositoryLiveTest extends BaseTest {
   @Autowired
   private UserRepository userRepository;
@@ -125,7 +126,7 @@ public class UserRepositoryLiveTest extends BaseTest {
     user.setName("Adam");
     mongoOps.insert(user);
 
-    final List<User> users = userRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+    final List<User> users = userRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
 
     assertThat(users.size(), is(2));
     assertThat(users.get(0).getName(), is("Adam"));

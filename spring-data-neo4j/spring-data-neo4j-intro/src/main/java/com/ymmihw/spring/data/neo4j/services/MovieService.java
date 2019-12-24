@@ -27,7 +27,7 @@ public class MovieService {
       nodes.add(map("title", row.get("movie"), "label", "movie"));
       int target = i;
       i++;
-      for (Object name : (Collection) row.get("cast")) {
+      for (Object name : (Collection<?>) row.get("cast")) {
         Map<String, Object> actor = map("title", name, "label", "actor");
         int source = nodes.indexOf(actor);
         if (source == -1) {

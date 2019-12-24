@@ -27,8 +27,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.gridfs.GridFSFindIterable;
 import com.mongodb.client.gridfs.model.GridFSFile;
@@ -47,9 +47,9 @@ public class GridFSLiveTest {
   public static class MongoClientDockerConfig {
     @Bean
     public MongoClient mongo() throws Exception {
-      ServerAddress addr =
-          new ServerAddress(container.getContainerIpAddress(), container.getFirstMappedPort());
-      return new MongoClient(addr);
+      MongoClient client = MongoClients.create(
+          "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
+      return client;
     }
   }
 

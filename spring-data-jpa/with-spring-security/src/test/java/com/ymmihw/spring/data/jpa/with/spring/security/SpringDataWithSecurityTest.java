@@ -3,8 +3,7 @@ package com.ymmihw.spring.data.jpa.with.spring.security;
 import static org.springframework.util.Assert.isTrue;
 import java.util.Date;
 import java.util.List;
-import javax.servlet.ServletContext;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +18,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import com.ymmihw.spring.data.jpa.with.spring.security.data.repositories.TweetRepository;
 import com.ymmihw.spring.data.jpa.with.spring.security.data.repositories.UserRepository;
 import com.ymmihw.spring.data.jpa.with.spring.security.models.AppUser;
@@ -28,29 +26,23 @@ import com.ymmihw.spring.data.jpa.with.spring.security.security.AppUserPrincipal
 
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-@ContextConfiguration
+@ContextConfiguration(classes = {AppConfig.class})
 @DirtiesContext
 public class SpringDataWithSecurityTest {
-  AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
   @Autowired
-  private ServletContext servletContext;
-  private static UserRepository userRepository;
-  private static TweetRepository tweetRepository;
+  private UserRepository userRepository;
+  @Autowired
+  private TweetRepository tweetRepository;
 
   @Before
   public void testInit() {
-    ctx.register(AppConfig.class);
-    ctx.setServletContext(servletContext);
-    ctx.refresh();
-    userRepository = ctx.getBean(UserRepository.class);
-    tweetRepository = ctx.getBean(TweetRepository.class);
     List<AppUser> appUsers =
         (List<AppUser>) userRepository.saveAll(DummyContentUtil.generateDummyUsers());
     tweetRepository.saveAll(DummyContentUtil.generateDummyTweets(appUsers));
   }
 
-  @AfterClass
-  public static void tearDown() {
+  @After
+  public void tearDown() {
     tweetRepository.deleteAll();
     userRepository.deleteAll();
   }

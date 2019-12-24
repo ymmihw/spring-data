@@ -74,7 +74,7 @@ public class ZipsAggregationLiveTest extends BaseTest {
 
     GroupOperation groupByStateAndSumPop = group("state").sum("pop").as("statePop");
     MatchOperation filterStates = match(new Criteria("statePop").gt(10000000));
-    SortOperation sortByPopDesc = sort(new Sort(Direction.DESC, "statePop"));
+    SortOperation sortByPopDesc = sort(Sort.by(Direction.DESC, "statePop"));
 
     Aggregation aggregation = newAggregation(groupByStateAndSumPop, filterStates, sortByPopDesc);
     AggregationResults<StatePopulation> result =
@@ -105,7 +105,7 @@ public class ZipsAggregationLiveTest extends BaseTest {
 
     GroupOperation sumTotalCityPop = group("state", "city").sum("pop").as("cityPop");
     GroupOperation averageStatePop = group("_id.state").avg("cityPop").as("avgCityPop");
-    SortOperation sortByAvgPopAsc = sort(new Sort(Direction.ASC, "avgCityPop"));
+    SortOperation sortByAvgPopAsc = sort(Sort.by(Direction.ASC, "avgCityPop"));
     ProjectionOperation projectToMatchModel =
         project().andExpression("_id").as("state").andExpression("avgCityPop").as("statePop");
     LimitOperation limitToOnlyFirstDoc = limit(1);

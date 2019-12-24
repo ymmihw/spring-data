@@ -262,7 +262,7 @@ public abstract class UserRepositoryCommon {
     userRepository.save(new User(USER_NAME_PETER, USER_EMAIL2, ACTIVE_STATUS));
     userRepository.save(new User("SAMPLE", USER_EMAIL3, INACTIVE_STATUS));
 
-    List<User> usersSortByName = userRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+    List<User> usersSortByName = userRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
 
     assertThat(usersSortByName.get(0).getName()).isEqualTo(USER_NAME_ADAM);
   }
@@ -273,7 +273,7 @@ public abstract class UserRepositoryCommon {
     userRepository.save(new User(USER_NAME_PETER, USER_EMAIL2, ACTIVE_STATUS));
     userRepository.save(new User("SAMPLE", USER_EMAIL3, INACTIVE_STATUS));
 
-    userRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+    userRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
 
     List<User> usersSortByNameLength = userRepository.findAll(Sort.by("LENGTH(name)"));
 

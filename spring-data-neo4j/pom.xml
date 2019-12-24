@@ -10,7 +10,6 @@
 
  <groupId>com.ymmihw.spring.data</groupId>
  <artifactId>spring-data-neo4j</artifactId>
- <version>0.0.1-SNAPSHOT</version>
  <packaging>pom</packaging>
 
 

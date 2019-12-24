@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ContextConfiguration;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.ymmihw.spring.data.mongodb.MongoContainer;
 import com.ymmihw.spring.data.mongodb.iac.BaseTest.MongoClientDockerConfig;
 import com.ymmihw.spring.data.mongodb.iac.config.MongoConfig;
@@ -24,10 +24,10 @@ public class BaseTest {
   @Configuration
   public static class MongoClientDockerConfig {
     @Bean
-    public MongoClient mongoClient() {
-      ServerAddress addr =
-          new ServerAddress(container.getContainerIpAddress(), container.getFirstMappedPort());
-      return new MongoClient(addr);
+    public MongoClient mongo() throws Exception {
+      MongoClient client = MongoClients.create(
+          "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
+      return client;
     }
   }
 

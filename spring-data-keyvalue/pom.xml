@@ -9,7 +9,6 @@
  </parent>
  <groupId>com.ymmihw.spring.data</groupId>
  <artifactId>spring-data-keyvalue</artifactId>
- <version>0.0.1-SNAPSHOT</version>
  <packaging>pom</packaging>
  <name>spring-data-keyvalue</name>
  <url>http://maven.apache.org</url>

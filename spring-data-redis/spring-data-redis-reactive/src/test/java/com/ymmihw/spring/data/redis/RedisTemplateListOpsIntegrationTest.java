@@ -14,13 +14,13 @@ public class RedisTemplateListOpsIntegrationTest extends BaseTest {
   private static final String LIST_NAME = "demo_list";
 
   @Autowired
-  private ReactiveRedisTemplate<String, String> redisTemplate;
+  private ReactiveRedisTemplate<String, String> reactiveRedisTemplateString;
 
   private ReactiveListOperations<String, String> reactiveListOps;
 
   @Before
   public void setup() {
-    reactiveListOps = redisTemplate.opsForList();
+    reactiveListOps = reactiveRedisTemplateString.opsForList();
   }
 
   @Test

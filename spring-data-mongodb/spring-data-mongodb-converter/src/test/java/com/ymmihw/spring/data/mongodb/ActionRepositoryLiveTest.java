@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.ymmihw.spring.data.mongodb.ActionRepositoryLiveTest.MongoClientDockerConfig;
 import com.ymmihw.spring.data.mongodb.config.MongoConfig;
 import com.ymmihw.spring.data.mongodb.model.Action;
@@ -31,9 +31,9 @@ public class ActionRepositoryLiveTest {
   public static class MongoClientDockerConfig {
     @Bean
     public MongoClient mongo() throws Exception {
-      ServerAddress addr =
-          new ServerAddress(container.getContainerIpAddress(), container.getFirstMappedPort());
-      return new MongoClient(addr);
+      MongoClient client = MongoClients.create(
+          "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
+      return client;
     }
   }
 

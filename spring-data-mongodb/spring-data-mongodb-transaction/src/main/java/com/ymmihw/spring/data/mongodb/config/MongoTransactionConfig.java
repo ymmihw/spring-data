@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableMongoRepositories(basePackages = "com.ymmihw.spring.data.mongodb")
-public class MongoTransactionConfig extends AbstractMongoConfiguration {
+public class MongoTransactionConfig extends AbstractMongoClientConfiguration {
   private final MongoClient mongoClient;
 
   @Bean

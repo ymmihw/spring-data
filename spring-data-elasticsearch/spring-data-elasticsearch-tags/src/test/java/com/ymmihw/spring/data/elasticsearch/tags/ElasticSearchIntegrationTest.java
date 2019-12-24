@@ -101,7 +101,6 @@ public class ElasticSearchIntegrationTest {
 
 
 
-  @SuppressWarnings("unchecked")
   @Test
   public void givenTagFilterQuery_whenSearchByTag_thenArticleIsFound() {
     final Page<Article> articles =
@@ -111,7 +110,6 @@ public class ElasticSearchIntegrationTest {
         hasProperty("id", is("4"))));
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void givenTagFilterQuery_whenSearchByAuthorsName_thenArticleIsFound() {
     final Page<Article> articles = articleService.findByAuthorsNameAndFilteredTagQuery("Doe",
@@ -121,7 +119,6 @@ public class ElasticSearchIntegrationTest {
         containsInAnyOrder(hasProperty("id", is("1")), hasProperty("id", is("4"))));
   }
 
-  @SuppressWarnings("unchecked")
   @Test
   public void givenTagFilterQuery_whenSearchByTagUsingDeclaredQuery_thenArticleIsFound() {
     Page<Article> articles =

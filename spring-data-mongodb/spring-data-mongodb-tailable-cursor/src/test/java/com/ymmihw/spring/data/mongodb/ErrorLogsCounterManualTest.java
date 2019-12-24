@@ -9,7 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.CreateCollectionOptions;
@@ -41,8 +42,8 @@ public class ErrorLogsCounterManualTest {
 
   private MongoTemplate initMongoTemplate() throws IOException {
     CONTAINER.start();
-    MongoClient mongoClient =
-        new MongoClient(CONTAINER.getContainerIpAddress(), CONTAINER.getFirstMappedPort());
+    MongoClient mongoClient = MongoClients.create(
+        "mongodb://" + CONTAINER.getContainerIpAddress() + ":" + CONTAINER.getFirstMappedPort());
     db = mongoClient.getDatabase(DB_NAME);
 
     return new MongoTemplate(mongoClient, DB_NAME);

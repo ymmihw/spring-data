@@ -149,7 +149,7 @@ public class DocumentQueryLiveTest extends BaseTest {
     mongoTemplate.insert(user);
 
     Query query = new Query();
-    query.with(new Sort(Sort.Direction.ASC, "age"));
+    query.with(Sort.by(Sort.Direction.ASC, "age"));
 
     List<User> users = mongoTemplate.find(query, User.class);
 
