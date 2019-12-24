@@ -15,6 +15,7 @@ public class ClientConfig {
   @Bean
   public Client client() {
     Settings settings = Settings.builder().build();
+    @SuppressWarnings("resource")
     PreBuiltTransportClient preBuiltTransportClient = new PreBuiltTransportClient(settings);
     try {
       TransportClient addTransportAddress = preBuiltTransportClient

@@ -11,11 +11,9 @@ import com.ymmihw.spring.data.mongodb.domain.Log;
 import com.ymmihw.spring.data.mongodb.domain.LogLevel;
 import com.ymmihw.spring.data.mongodb.repository.LogsRepository;
 import com.ymmihw.spring.data.mongodb.service.InfoLogsCounter;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
 
-@Slf4j
 public class InfoLogsCounterManualTest extends BaseTest {
 
   @Autowired

@@ -9,7 +9,6 @@
  </parent>
  <groupId>com.ymmihw.spring.data</groupId>
  <artifactId>composable-repositories</artifactId>
- <version>0.0.1-SNAPSHOT</version>
  <name>composable-repositories</name>
  <url>http://maven.apache.org</url>
  <properties>

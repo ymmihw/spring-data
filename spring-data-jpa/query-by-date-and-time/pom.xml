@@ -9,7 +9,6 @@
  </parent>
  <groupId>com.ymmihw.spring.data.jpa</groupId>
  <artifactId>query-by-date-and-time</artifactId>
- <version>0.0.1-SNAPSHOT</version>
  <name>query-by-date-and-time</name>
  <url>http://maven.apache.org</url>
  <properties>

@@ -13,14 +13,15 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @PropertySource("classpath:persistence-h2.properties")
-@EnableJpaRepositories(basePackages = {"com.ymmihw.spring.data.jpa.with.spring.security.data.repositories"})
+@EnableJpaRepositories(
+    basePackages = {"com.ymmihw.spring.data.jpa.with.spring.security.data.repositories"})
 @EnableWebMvc
 @Import(SpringSecurityConfig.class)
-public class AppConfig extends WebMvcConfigurerAdapter {
+public class AppConfig implements WebMvcConfigurer {
 
   @Autowired
   private Environment env;

@@ -50,6 +50,7 @@ public class ElasticSearchIntegrationTest {
     @Bean
     public Client client() {
       Settings settings = Settings.builder().put("client.transport.sniff", false).build();
+      @SuppressWarnings("resource")
       PreBuiltTransportClient preBuiltTransportClient = new PreBuiltTransportClient(settings);
       try {
         TransportClient addTransportAddress = preBuiltTransportClient.addTransportAddress(

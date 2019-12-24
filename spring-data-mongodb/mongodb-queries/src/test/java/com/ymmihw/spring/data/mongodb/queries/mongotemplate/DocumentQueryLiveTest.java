@@ -178,7 +178,7 @@ public class DocumentQueryLiveTest extends BaseTest {
     user.setAge(35);
     mongoTemplate.insert(user);
 
-    final Pageable pageableRequest = new PageRequest(0, 2);
+    final Pageable pageableRequest = PageRequest.of(0, 2);
     Query query = new Query();
     query.with(pageableRequest);
 

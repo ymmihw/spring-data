@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.ymmihw.spring.data.elasticsearch")
-@ComponentScan(basePackages = {"com.ymmihw.spring.data.elasticsearce"})
+@ComponentScan(basePackages = {"com.ymmihw.spring.data.elasticsearch.queries.service"})
 @RequiredArgsConstructor
 public class Config {
   private final Client client;

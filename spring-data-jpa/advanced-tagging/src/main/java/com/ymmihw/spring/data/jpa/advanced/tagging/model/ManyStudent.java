@@ -1,10 +1,12 @@
 package com.ymmihw.spring.data.jpa.advanced.tagging.model;
 
 import javax.persistence.*;
+import lombok.Getter;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Getter
 public class ManyStudent {
 
   @Id
@@ -22,10 +24,6 @@ public class ManyStudent {
 
   public ManyStudent(String name) {
     this.name = name;
-  }
-
-  public Set<ManyTag> getManyTags() {
-    return manyTags;
   }
 
   public void setManyTags(Set<ManyTag> manyTags) {

@@ -16,10 +16,8 @@ import com.ymmihw.spring.data.mongodb.domain.Log;
 import com.ymmihw.spring.data.mongodb.domain.LogLevel;
 import com.ymmihw.spring.data.mongodb.repository.LogsRepository;
 import com.ymmihw.spring.data.mongodb.service.WarnLogsCounter;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
-@Slf4j
 public class WarnLogsCounterManualTest extends BaseTest {
   @ClassRule
   public static MongoContainer container = MongoContainer.getInstance();

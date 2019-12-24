@@ -42,8 +42,8 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.github.dockerjava.api.DockerClient;
 import com.ymmihw.spring.data.elasticsearch.MyElasticsearchContainer;
+import com.ymmihw.spring.data.elasticsearch.queries.ElasticSearchQueryIntegrationTest.DockerClient;
 import com.ymmihw.spring.data.elasticsearch.queries.config.Config;
 import com.ymmihw.spring.data.elasticsearch.queries.model.Article;
 import com.ymmihw.spring.data.elasticsearch.queries.model.Author;
@@ -62,6 +62,7 @@ public class ElasticSearchQueryIntegrationTest {
     @Bean
     public Client client() {
       Settings settings = Settings.builder().put("client.transport.sniff", false).build();
+      @SuppressWarnings("resource")
       PreBuiltTransportClient preBuiltTransportClient = new PreBuiltTransportClient(settings);
       try {
         TransportClient addTransportAddress = preBuiltTransportClient.addTransportAddress(

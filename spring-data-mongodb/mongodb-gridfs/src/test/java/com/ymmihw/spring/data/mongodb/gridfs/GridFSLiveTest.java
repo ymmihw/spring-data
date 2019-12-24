@@ -78,6 +78,7 @@ public class GridFSLiveTest {
     assertNotNull(id);
   }
 
+  @SuppressWarnings("deprecation")
   @Test
   public void givenFileWithMetadataExist_whenFindingFileById_thenFileWithMetadataIsFound()
       throws IOException {
