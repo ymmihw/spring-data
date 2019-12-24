@@ -5,7 +5,6 @@
 
  <groupId>com.ymmihw</groupId>
  <artifactId>spring-data-redis</artifactId>
- <version>0.0.1-SNAPSHOT</version>
  <packaging>pom</packaging>
 
  <name>spring-data-redis</name>
