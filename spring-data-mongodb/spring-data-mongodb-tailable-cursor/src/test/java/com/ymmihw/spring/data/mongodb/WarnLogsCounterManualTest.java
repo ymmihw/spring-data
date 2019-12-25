@@ -3,15 +3,10 @@ package com.ymmihw.spring.data.mongodb;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.CollectionOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import com.mongodb.reactivestreams.client.MongoClient;
-import com.mongodb.reactivestreams.client.MongoClients;
 import com.ymmihw.spring.data.mongodb.domain.Log;
 import com.ymmihw.spring.data.mongodb.domain.LogLevel;
 import com.ymmihw.spring.data.mongodb.repository.LogsRepository;
@@ -19,17 +14,6 @@ import com.ymmihw.spring.data.mongodb.service.WarnLogsCounter;
 import reactor.core.publisher.Flux;
 
 public class WarnLogsCounterManualTest extends BaseTest {
-  @ClassRule
-  public static MongoContainer container = MongoContainer.getInstance();
-
-  @Configuration
-  public static class MongoClientDockerConfig {
-    @Bean
-    public MongoClient reactiveMongoClient() {
-      return MongoClients.create(
-          "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
-    }
-  }
 
   @Autowired
   private LogsRepository repository;

@@ -15,14 +15,15 @@ import com.ymmihw.spring.data.mongodb.BaseTest.MongoClientDockerConfig;
 @SpringBootTest(classes = {LogsCounterApplication.class, MongoClientDockerConfig.class})
 public class BaseTest {
   @ClassRule
-  public static MongoContainer container = MongoContainer.getInstance();
+  public static final MongoContainer CONTAINER = MongoContainer.getInstance();
 
   @Configuration
   public static class MongoClientDockerConfig {
     @Bean
     public MongoClient reactiveMongoClient() {
+      CONTAINER.start();
       return MongoClients.create(
-          "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
+          "mongodb://" + CONTAINER.getContainerIpAddress() + ":" + CONTAINER.getFirstMappedPort());
     }
   }
 
