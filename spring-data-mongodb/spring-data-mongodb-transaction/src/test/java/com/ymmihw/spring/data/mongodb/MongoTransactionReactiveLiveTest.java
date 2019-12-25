@@ -1,26 +1,36 @@
 package com.ymmihw.spring.data.mongodb;
 
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import com.ymmihw.spring.data.mongodb.MongoTransactionReactiveLiveTest.ReactiveMongoClientDockerConfig;
 import com.ymmihw.spring.data.mongodb.config.MongoReactiveConfig;
 import com.ymmihw.spring.data.mongodb.model.User;
 
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(inheritInitializers = false,
     classes = {MongoReactiveConfig.class, ReactiveMongoClientDockerConfig.class})
-public class MongoTransactionReactiveLiveTest extends BaseTest {
+public class MongoTransactionReactiveLiveTest {
+  @ClassRule
+  public static MongoContainer container = new SessionMongoContainer();
+
   @Configuration
   public static class ReactiveMongoClientDockerConfig {
     @Bean
-    public MongoClient reactiveMongoClient() {
+    public MongoClient reactiveMongoClient() throws InterruptedException {
+      container.start();
+      TimeUnit.SECONDS.sleep(10);
       return MongoClients.create(
           "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
     }

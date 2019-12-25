@@ -1,5 +1,6 @@
 package com.ymmihw.spring.data.mongodb;
 
+import java.util.concurrent.TimeUnit;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,8 @@ public class BaseTest {
   public static class MongoClientDockerConfig {
     @Bean
     public MongoClient mongo() throws Exception {
+      container.start();
+      TimeUnit.SECONDS.sleep(10);
       MongoClient client = MongoClients.create(
           "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
       return client;
