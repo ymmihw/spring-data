@@ -7,20 +7,23 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import com.ymmihw.spring.data.mongodb.MongoTransactionReactiveLiveTest.ReactiveMongoClientDockerConfig;
 import com.ymmihw.spring.data.mongodb.config.MongoReactiveConfig;
 import com.ymmihw.spring.data.mongodb.model.User;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(inheritInitializers = false,
-    classes = {MongoReactiveConfig.class, ReactiveMongoClientDockerConfig.class})
+@ContextConfiguration(inheritInitializers = false, classes = {MongoReactiveConfig.class,
+    ReactiveMongoClientDockerConfig.class, TransactionAutoConfiguration.class})
 public class MongoTransactionReactiveLiveTest {
   @ClassRule
   public static MongoContainer container = new SessionMongoContainer();
@@ -52,11 +55,15 @@ public class MongoTransactionReactiveLiveTest {
     reactiveOps.dropCollection(User.class);
   }
 
+  @Autowired
+  private TransactionalOperator transactionalOperator;
+
   @Test
   public void whenPerformTransaction_thenSuccess() {
     User user1 = new User("Jane", 23);
     User user2 = new User("John", 34);
-    reactiveOps.inTransaction().execute(action -> action.insert(user1).then(action.insert(user2)));
+    transactionalOperator
+        .execute(reactiveTransaction -> reactiveOps.insert(user1).then(reactiveOps.insert(user2)));
   }
 
 }
