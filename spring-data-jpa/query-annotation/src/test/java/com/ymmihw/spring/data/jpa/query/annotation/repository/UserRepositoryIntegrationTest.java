@@ -7,14 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import com.ymmihw.spring.data.jpa.query.annotation.config.PersistenceJPAConfig;
+import com.ymmihw.spring.data.jpa.query.annotation.Applicatoin;
 import com.ymmihw.spring.data.jpa.query.annotation.model.User;
 
-/**
- * Created by adam.
- */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = PersistenceJPAConfig.class)
+@SpringBootTest(classes = Applicatoin.class)
 @DirtiesContext
 public class UserRepositoryIntegrationTest extends UserRepositoryCommon {
 
