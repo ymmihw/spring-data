@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
-import com.ymmihw.spring.data.jpa.advanced.tagging.config.JpaConfig;
 import com.ymmihw.spring.data.jpa.advanced.tagging.dao.ManyStudentRepository;
 import com.ymmihw.spring.data.jpa.advanced.tagging.dao.ManyTagRepository;
 import com.ymmihw.spring.data.jpa.advanced.tagging.dao.StudentRepository;
@@ -22,7 +21,7 @@ import com.ymmihw.spring.data.jpa.advanced.tagging.model.SkillTag;
 import com.ymmihw.spring.data.jpa.advanced.tagging.model.Student;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JpaConfig.class}, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = {Applicatoin.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
 public class AdvancedTaggingIntegrationTest {
   @Resource
