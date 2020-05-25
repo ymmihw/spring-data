@@ -46,7 +46,7 @@ public class BookRepositoryIntegrationTest {
   private CassandraAdminOperations adminTemplate;
 
   @ClassRule
-  public static CassandraContainer<?> container = new CassandraContainer<>("3.11.6");
+  public static CassandraContainer<?> container = new CassandraContainer<>("cassandra:3.11.6");
 
   //
 
