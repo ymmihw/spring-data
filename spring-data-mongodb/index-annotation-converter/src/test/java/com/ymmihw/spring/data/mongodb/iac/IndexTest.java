@@ -11,6 +11,6 @@ import com.ymmihw.spring.data.mongodb.iac.model.User;
 public class IndexTest extends BaseTest {
   @Test
   public void createIndexProgrammatically() {
-    mongoTemplate.indexOps(User.class).ensureIndex(new Index().on("name", Direction.ASC));
+    mongoTemplate.indexOps(User.class).ensureIndex(new Index().on("name", Direction.DESC));
   }
 }
