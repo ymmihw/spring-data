@@ -53,8 +53,9 @@ public class BookRepositoryIntegrationTest {
   @BeforeClass
   public static void startCassandraEmbedded() throws InterruptedException, IOException {
     container.start();
-    Cluster cluster = Cluster.builder().addContactPoints(container.getContainerIpAddress())
-        .withPort(container.getFirstMappedPort()).build();
+    Cluster cluster =
+        Cluster.builder().withoutMetrics().addContactPoints(container.getContainerIpAddress())
+            .withPort(container.getFirstMappedPort()).build();
     // cluster = Cluster.open();
     // cluster.init();
     LOGGER.info("Server Started at 127.0.0.1:9142... ");
