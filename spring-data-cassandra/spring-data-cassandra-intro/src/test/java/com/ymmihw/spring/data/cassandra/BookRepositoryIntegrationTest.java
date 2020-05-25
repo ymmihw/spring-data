@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.UUID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.tinkerpop.gremlin.driver.Client;
-import org.apache.tinkerpop.gremlin.driver.Cluster;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -20,6 +18,8 @@ import org.springframework.data.cassandra.core.CassandraAdminOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.CassandraContainer;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.google.common.collect.ImmutableSet;
 import com.ymmihw.spring.data.cassandra.config.CassandraConfig;
@@ -46,22 +46,22 @@ public class BookRepositoryIntegrationTest {
   private CassandraAdminOperations adminTemplate;
 
   @ClassRule
-  public static CassandraContainer<?> container = new CassandraContainer<>("cassandra:2.1");
+  public static CassandraContainer<?> container = new CassandraContainer<>("cassandra:3.11.6");
 
   //
 
   @BeforeClass
   public static void startCassandraEmbedded() throws InterruptedException, IOException {
     container.start();
-    Cluster cluster = Cluster.build().addContactPoints(container.getContainerIpAddress())
-        .port(container.getFirstMappedPort()).create();
+    Cluster cluster = Cluster.builder().addContactPoints(container.getContainerIpAddress())
+        .withPort(container.getFirstMappedPort()).build();
     // cluster = Cluster.open();
     // cluster.init();
     LOGGER.info("Server Started at 127.0.0.1:9142... ");
-    final Client client = cluster.connect();
-    client.init();
-    client.submit(KEYSPACE_CREATION_QUERY);
-    client.submit(KEYSPACE_ACTIVATE_QUERY);
+    final Session session = cluster.connect();
+    session.init();
+    session.execute(KEYSPACE_CREATION_QUERY);
+    session.execute(KEYSPACE_ACTIVATE_QUERY);
     LOGGER.info("KeySpace created and activated.");
     Thread.sleep(5000);
   }
