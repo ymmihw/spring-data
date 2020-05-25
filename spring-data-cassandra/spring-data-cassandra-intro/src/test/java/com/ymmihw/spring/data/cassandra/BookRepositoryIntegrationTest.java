@@ -4,24 +4,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import java.io.IOException;
 import java.util.HashMap;
-import org.apache.cassandra.exceptions.ConfigurationException;
-import org.apache.cassandra.utils.UUIDGen;
+import java.util.UUID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.thrift.transport.TTransportException;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Cluster;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraAdminOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.testcontainers.containers.CassandraContainer;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.google.common.collect.ImmutableSet;
 import com.ymmihw.spring.data.cassandra.config.CassandraConfig;
@@ -47,15 +45,21 @@ public class BookRepositoryIntegrationTest {
   @Autowired
   private CassandraAdminOperations adminTemplate;
 
+  @ClassRule
+  public static CassandraContainer<?> container = new CassandraContainer<>("3.11.6");
+
   //
 
   @BeforeClass
-  public static void startCassandraEmbedded()
-      throws InterruptedException, TTransportException, ConfigurationException, IOException {
-    EmbeddedCassandraServerHelper.startEmbeddedCassandra();
-    final Cluster cluster = Cluster.build().addContactPoints("127.0.0.1").port(9142).create();
+  public static void startCassandraEmbedded() throws InterruptedException, IOException {
+    container.start();
+    Cluster cluster = Cluster.build().addContactPoints(container.getContainerIpAddress())
+        .port(container.getFirstMappedPort()).create();
+    // cluster = Cluster.open();
+    // cluster.init();
     LOGGER.info("Server Started at 127.0.0.1:9142... ");
     final Client client = cluster.connect();
+    client.init();
     client.submit(KEYSPACE_CREATION_QUERY);
     client.submit(KEYSPACE_ACTIVATE_QUERY);
     LOGGER.info("KeySpace created and activated.");
@@ -63,8 +67,7 @@ public class BookRepositoryIntegrationTest {
   }
 
   @Before
-  public void createTable()
-      throws InterruptedException, TTransportException, ConfigurationException, IOException {
+  public void createTable() throws InterruptedException, IOException {
     adminTemplate.createTable(true, CqlIdentifier.fromCql(DATA_TABLE_NAME), Book.class,
         new HashMap<String, Object>());
   }
@@ -72,7 +75,7 @@ public class BookRepositoryIntegrationTest {
   @Test
   public void whenSavingBook_thenAvailableOnRetrieval() {
     final Book javaBook =
-        new Book(new BookKey(UUIDGen.getTimeUUID(), "Head First Java", "O'Reilly Media"),
+        new Book(new BookKey(UUID.randomUUID(), "Head First Java", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
     bookRepository.save(javaBook);
     final Iterable<Book> books =
@@ -83,7 +86,7 @@ public class BookRepositoryIntegrationTest {
   @Test
   public void whenUpdatingBooks_thenAvailableOnRetrieval() {
     final Book javaBook =
-        new Book(new BookKey(UUIDGen.getTimeUUID(), "Head First Java", "O'Reilly Media"),
+        new Book(new BookKey(UUID.randomUUID(), "Head First Java", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
     bookRepository.save(javaBook);
     final Iterable<Book> books =
@@ -98,7 +101,7 @@ public class BookRepositoryIntegrationTest {
   @Test(expected = java.util.NoSuchElementException.class)
   public void whenDeletingExistingBooks_thenNotAvailableOnRetrieval() {
     final Book javaBook =
-        new Book(new BookKey(UUIDGen.getTimeUUID(), "Head First Java", "O'Reilly Media"),
+        new Book(new BookKey(UUID.randomUUID(), "Head First Java", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
     bookRepository.save(javaBook);
     bookRepository.delete(javaBook);
@@ -110,10 +113,10 @@ public class BookRepositoryIntegrationTest {
   @Test
   public void whenSavingBooks_thenAllShouldAvailableOnRetrieval() {
     final Book javaBook =
-        new Book(new BookKey(UUIDGen.getTimeUUID(), "Head First Java", "O'Reilly Media"),
+        new Book(new BookKey(UUID.randomUUID(), "Head First Java", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
     final Book dPatternBook =
-        new Book(new BookKey(UUIDGen.getTimeUUID(), "Head Design Patterns", "O'Reilly Media"),
+        new Book(new BookKey(UUID.randomUUID(), "Head Design Patterns", "O'Reilly Media"),
             ImmutableSet.of("Computer", "Software"));
     bookRepository.saveAll(ImmutableSet.of(javaBook, dPatternBook));
     final Iterable<Book> books = bookRepository.findAll();
@@ -129,9 +132,9 @@ public class BookRepositoryIntegrationTest {
     adminTemplate.dropTable(CqlIdentifier.fromCql(DATA_TABLE_NAME));
   }
 
-  @AfterClass
-  public static void stopCassandraEmbedded() {
-    EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
-  }
+  // @AfterClass
+  // public static void stopCassandraEmbedded() {
+  // EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
+  // }
 
 }
