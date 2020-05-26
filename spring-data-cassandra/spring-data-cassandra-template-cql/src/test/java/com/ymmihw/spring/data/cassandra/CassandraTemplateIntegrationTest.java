@@ -116,8 +116,8 @@ public class CassandraTemplateIntegrationTest {
             ImmutableSet.of("Computer", "Software"));
     cassandraTemplate.insert(javaBook);
     final Book retrievedBook =
-        cassandraTemplate.selectOne(query(where("title").is("Head First Java"))
-            .and(where("publisher").is("O'Reilly Media")).limit(10), Book.class);
+        cassandraTemplate.selectOne(query(where("key.title").is("Head First Java"))
+            .and(where("key.publisher").is("O'Reilly Media")).limit(10), Book.class);
     assertEquals(javaBook.getId(), retrievedBook.getId());
   }
 
