@@ -60,7 +60,7 @@ public class BookRepositoryIntegrationTest {
 
     @Override
     protected String getLocalDataCenter() {
-      return "dc1";
+      return "datacenter1";
     }
 
   }
