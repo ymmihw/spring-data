@@ -22,12 +22,11 @@
   <dependency>
    <groupId>io.dropwizard.metrics</groupId>
    <artifactId>metrics-core</artifactId>
-   <version>3.2.2</version>
   </dependency>
   <dependency>
-   <groupId>org.cassandraunit</groupId>
-   <artifactId>cassandra-unit-spring</artifactId>
-   <version>3.11.2.0</version>
+   <groupId>org.testcontainers</groupId>
+   <artifactId>cassandra</artifactId>
+   <version>1.14.2</version>
    <scope>test</scope>
   </dependency>
  </dependencies>
