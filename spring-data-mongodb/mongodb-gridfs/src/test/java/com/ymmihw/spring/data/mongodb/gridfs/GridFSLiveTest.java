@@ -97,7 +97,7 @@ public class GridFSLiveTest {
     Document document = gridFSDBFile.getMetadata();
     assertNotNull(document);
     assertThat(gridFSDBFile.getObjectId().toString(), is(id));
-    assertThat(document.keySet().size(), is(3));
+    assertThat(document.keySet().size(), is(2));
     assertNotNull(gridFSDBFile.getUploadDate());
     assertNotNull(gridFSDBFile.getChunkSize());
     assertThat(document.get("_contentType"), is("image/png"));
