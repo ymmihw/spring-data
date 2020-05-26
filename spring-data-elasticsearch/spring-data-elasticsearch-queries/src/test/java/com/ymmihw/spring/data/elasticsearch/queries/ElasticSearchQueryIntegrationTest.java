@@ -10,26 +10,20 @@ import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.junit.Assert.assertEquals;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.apache.lucene.search.join.ScoreMode;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.BucketOrder;
-import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -37,9 +31,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.RestClients;
+import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ymmihw.spring.data.elasticsearch.MyElasticsearchContainer;
@@ -57,43 +56,35 @@ public class ElasticSearchQueryIntegrationTest {
   public static MyElasticsearchContainer container = MyElasticsearchContainer.getInstance();
 
   @Configuration
-  public static class DockerClient {
+  public static class DockerClient extends AbstractElasticsearchConfiguration {
 
+    @Override
     @Bean
-    public Client client() {
-      Settings settings = Settings.builder().put("client.transport.sniff", false).build();
-      @SuppressWarnings("resource")
-      PreBuiltTransportClient preBuiltTransportClient = new PreBuiltTransportClient(settings);
-      try {
-        TransportClient addTransportAddress = preBuiltTransportClient.addTransportAddress(
-            new TransportAddress(InetAddress.getByName(container.getContainerIpAddress()),
-                container.getMappedPort(9300)));
-        return addTransportAddress;
-      } catch (final UnknownHostException ioex) {
-        throw new RuntimeException(ioex);
-      }
+    public RestHighLevelClient elasticsearchClient() {
+      final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
+          .connectedTo(container.getContainerIpAddress() + ":" + container.getMappedPort(9200))
+          .build();
 
+      return RestClients.create(clientConfiguration).rest();
     }
+
   }
 
   @Autowired
-  private ElasticsearchTemplate elasticsearchTemplate;
+  private ElasticsearchOperations elasticsearchOperations;
 
   @Autowired
   private ArticleService articleService;
-
-  @Autowired
-  private Client client;
 
   private final Author johnSmith = new Author("John Smith");
   private final Author johnDoe = new Author("John Doe");
 
   @Before
   public void before() {
-    elasticsearchTemplate.deleteIndex(Article.class);
-    elasticsearchTemplate.createIndex(Article.class);
-    elasticsearchTemplate.putMapping(Article.class);
-    elasticsearchTemplate.refresh(Article.class);
+    elasticsearchOperations.deleteIndex(Article.class);
+    elasticsearchOperations.createIndex(Article.class);
+    elasticsearchOperations.putMapping(Article.class);
+    elasticsearchOperations.refresh(Article.class);
 
     Article article = new Article("Spring Data Elasticsearch");
     article.setAuthors(asList(johnSmith, johnDoe));
@@ -118,39 +109,43 @@ public class ElasticSearchQueryIntegrationTest {
 
   @Test
   public void givenFullTitle_whenRunMatchQuery_thenDocIsFound() {
-    final SearchQuery searchQuery = new NativeSearchQueryBuilder()
+    final Query searchQuery = new NativeSearchQueryBuilder()
         .withQuery(matchQuery("title", "Search engines").operator(AND)).build();
-    final List<Article> articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    final List<SearchHit<Article>> articles =
+        elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();
     assertEquals(1, articles.size());
   }
 
   @Test
   public void givenOneTermFromTitle_whenRunMatchQuery_thenDocIsFound() {
-    final SearchQuery searchQuery =
+    final Query searchQuery =
         new NativeSearchQueryBuilder().withQuery(matchQuery("title", "Engines Solutions")).build();
-    final List<Article> articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    final List<SearchHit<Article>> articles =
+        elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();
     assertEquals(1, articles.size());
-    assertEquals("Search engines", articles.get(0).getTitle());
+    assertEquals("Search engines", articles.get(0).getContent().getTitle());
   }
 
   @Test
   public void givenPartTitle_whenRunMatchQuery_thenDocIsFound() {
-    final SearchQuery searchQuery =
+    final Query searchQuery =
         new NativeSearchQueryBuilder().withQuery(matchQuery("title", "elasticsearch data")).build();
-    final List<Article> articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    final List<SearchHit<Article>> articles =
+        elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();;
     assertEquals(3, articles.size());
   }
 
   @Test
   public void givenFullTitle_whenRunMatchQueryOnVerbatimField_thenDocIsFound() {
-    SearchQuery searchQuery = new NativeSearchQueryBuilder()
+    Query searchQuery = new NativeSearchQueryBuilder()
         .withQuery(matchQuery("title.verbatim", "Second Article About Elasticsearch")).build();
-    List<Article> articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    List<SearchHit<Article>> articles =
+        elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();;
     assertEquals(1, articles.size());
 
     searchQuery = new NativeSearchQueryBuilder()
         .withQuery(matchQuery("title.verbatim", "Second Article About")).build();
-    articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    articles = elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();;
     assertEquals(0, articles.size());
   }
 
@@ -159,8 +154,9 @@ public class ElasticSearchQueryIntegrationTest {
     final QueryBuilder builder =
         nestedQuery("authors", boolQuery().must(termQuery("authors.name", "smith")), ScoreMode.Avg);
 
-    final SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(builder).build();
-    final List<Article> articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    final Query searchQuery = new NativeSearchQueryBuilder().withQuery(builder).build();
+    final List<SearchHit<Article>> articles =
+        elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();;
 
     assertEquals(2, articles.size());
   }
@@ -169,11 +165,11 @@ public class ElasticSearchQueryIntegrationTest {
   public void givenAnalyzedQuery_whenMakeAggregationOnTermCount_thenEachTokenCountsSeparately() {
     final TermsAggregationBuilder aggregation =
         AggregationBuilders.terms("top_tags").field("title.text");
-    final SearchResponse response = client.prepareSearch("blog").setTypes("article")
-        .addAggregation(aggregation).execute().actionGet();
-
-    final Map<String, Aggregation> results = response.getAggregations().asMap();
-    final StringTerms topTags = (StringTerms) results.get("top_tags");
+    Query query = new NativeSearchQueryBuilder().addAggregation(aggregation).build();
+    SearchHits<Article> searchHits = elasticsearchOperations.search(query, Article.class);
+    Aggregations aggregations = searchHits.getAggregations();
+    final Map<String, Aggregation> results = aggregations.asMap();
+    final ParsedStringTerms topTags = (ParsedStringTerms) results.get("top_tags");
 
     final List<String> keys =
         topTags.getBuckets().stream().map(b -> b.getKeyAsString()).collect(toList());
@@ -186,11 +182,11 @@ public class ElasticSearchQueryIntegrationTest {
   public void givenNotAnalyzedQuery_whenMakeAggregationOnTermCount_thenEachTermCountsIndividually() {
     final TermsAggregationBuilder aggregation =
         AggregationBuilders.terms("top_tags").field("tags").order(BucketOrder.count(false));
-    final SearchResponse response = client.prepareSearch("blog").setTypes("article")
-        .addAggregation(aggregation).execute().actionGet();
-
-    final Map<String, Aggregation> results = response.getAggregations().asMap();
-    final StringTerms topTags = (StringTerms) results.get("top_tags");
+    Query query = new NativeSearchQueryBuilder().addAggregation(aggregation).build();
+    SearchHits<Article> searchHits = elasticsearchOperations.search(query, Article.class);
+    Aggregations aggregations = searchHits.getAggregations();
+    final Map<String, Aggregation> results = aggregations.asMap();
+    final ParsedStringTerms topTags = (ParsedStringTerms) results.get("top_tags");
 
     final List<String> keys =
         topTags.getBuckets().stream().map(b -> b.getKeyAsString()).collect(toList());
@@ -199,29 +195,31 @@ public class ElasticSearchQueryIntegrationTest {
 
   @Test
   public void givenNotExactPhrase_whenUseSlop_thenQueryMatches() {
-    final SearchQuery searchQuery = new NativeSearchQueryBuilder()
+    final Query searchQuery = new NativeSearchQueryBuilder()
         .withQuery(matchPhraseQuery("title", "spring elasticsearch").slop(1)).build();
-    final List<Article> articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    final List<SearchHit<Article>> articles =
+        elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();;
     assertEquals(1, articles.size());
   }
 
   @Test
   public void givenPhraseWithType_whenUseFuzziness_thenQueryMatches() {
-    final SearchQuery searchQuery =
+    final Query searchQuery =
         new NativeSearchQueryBuilder().withQuery(matchQuery("title", "spring date elasticserch")
             .operator(AND).fuzziness(Fuzziness.ONE).prefixLength(3)).build();
 
-    final List<Article> articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    final List<SearchHit<Article>> articles =
+        elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();;
     assertEquals(1, articles.size());
   }
 
   @Test
   public void givenMultimatchQuery_whenDoSearch_thenAllProvidedFieldsMatch() {
-    final SearchQuery searchQuery =
-        new NativeSearchQueryBuilder().withQuery(multiMatchQuery("tutorial").field("title")
-            .field("tags").type(MultiMatchQueryBuilder.Type.BEST_FIELDS)).build();
+    final Query searchQuery = new NativeSearchQueryBuilder().withQuery(multiMatchQuery("tutorial")
+        .field("title").field("tags").type(MultiMatchQueryBuilder.Type.BEST_FIELDS)).build();
 
-    final List<Article> articles = elasticsearchTemplate.queryForList(searchQuery, Article.class);
+    final List<SearchHit<Article>> articles =
+        elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();;
     assertEquals(2, articles.size());
   }
 }
