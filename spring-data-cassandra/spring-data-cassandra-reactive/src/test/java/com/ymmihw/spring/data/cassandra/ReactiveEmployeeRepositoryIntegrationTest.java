@@ -62,6 +62,11 @@ public class ReactiveEmployeeRepositoryIntegrationTest {
   EmployeeRepository repository;
 
 
+  public static final String KEYSPACE_CREATION_QUERY =
+      "CREATE KEYSPACE IF NOT EXISTS practice WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '3' };";
+
+  public static final String KEYSPACE_ACTIVATE_QUERY = "USE practice;";
+
   @BeforeClass
   public static void startCassandraEmbedded() throws InterruptedException, IOException {
     container.start();
@@ -71,6 +76,8 @@ public class ReactiveEmployeeRepositoryIntegrationTest {
     final Session session = cluster.connect();
     session.execute(
         "CREATE TABLE employee(id int PRIMARY KEY,name text,address text,email text,age int);");
+    session.execute(KEYSPACE_CREATION_QUERY);
+    session.execute(KEYSPACE_ACTIVATE_QUERY);
     Thread.sleep(5000);
   }
 
