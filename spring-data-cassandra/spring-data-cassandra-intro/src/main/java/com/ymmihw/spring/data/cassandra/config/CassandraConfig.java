@@ -31,9 +31,10 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     return Integer.parseInt(environment.getProperty("cassandra.port"));
   }
 
-  @Override
-  @Bean
-  public CassandraMappingContext cassandraMapping() throws ClassNotFoundException {
-    return new CassandraMappingContext();
-  }
+  // @Override
+  // @Bean
+  // @Override
+  // public CassandraMappingContext cassandraMapping() throws ClassNotFoundException {
+  // return new CassandraMappingContext();
+  // }
 }
