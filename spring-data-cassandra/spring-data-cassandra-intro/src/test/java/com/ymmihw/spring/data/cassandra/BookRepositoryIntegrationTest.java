@@ -21,7 +21,7 @@ import org.testcontainers.containers.CassandraContainer;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
-import com.google.common.collect.ImmutableSet;
+import com.datastax.oss.driver.shaded.guava.common.collect.ImmutableSet;
 import com.ymmihw.spring.data.cassandra.config.CassandraConfig;
 import com.ymmihw.spring.data.cassandra.model.Book;
 import com.ymmihw.spring.data.cassandra.model.BookKey;
@@ -56,11 +56,9 @@ public class BookRepositoryIntegrationTest {
     Cluster cluster =
         Cluster.builder().withoutMetrics().addContactPoints(container.getContainerIpAddress())
             .withPort(container.getFirstMappedPort()).build();
-    // cluster = Cluster.open();
-    // cluster.init();
-    LOGGER.info("Server Started at 127.0.0.1:9142... ");
+    // Cluster cluster = Cluster.open();
+    // LOGGER.info("Server Started at 127.0.0.1:9142... ");
     final Session session = cluster.connect();
-    session.init();
     session.execute(KEYSPACE_CREATION_QUERY);
     session.execute(KEYSPACE_ACTIVATE_QUERY);
     LOGGER.info("KeySpace created and activated.");
