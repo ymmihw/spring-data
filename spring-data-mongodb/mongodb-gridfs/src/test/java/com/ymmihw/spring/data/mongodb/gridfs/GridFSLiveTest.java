@@ -1,10 +1,10 @@
 package com.ymmihw.spring.data.mongodb.gridfs;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,7 +35,8 @@ import com.mongodb.client.gridfs.model.GridFSFile;
 import com.ymmihw.spring.data.mongodb.MongoContainer;
 import com.ymmihw.spring.data.mongodb.gridfs.GridFSLiveTest.MongoClientDockerConfig;
 
-@ContextConfiguration(classes = {MongoConfig.class, MongoClientDockerConfig.class})
+@ContextConfiguration(
+    classes = {MongoConfig.class, MongoClientDockerConfig.class, GridFsTemplateConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class GridFSLiveTest {
 
@@ -78,7 +79,6 @@ public class GridFSLiveTest {
     assertNotNull(id);
   }
 
-  @SuppressWarnings("deprecation")
   @Test
   public void givenFileWithMetadataExist_whenFindingFileById_thenFileWithMetadataIsFound()
       throws IOException {
@@ -98,7 +98,6 @@ public class GridFSLiveTest {
     assertNotNull(document);
     assertThat(gridFSDBFile.getObjectId().toString(), is(id));
     assertThat(document.keySet().size(), is(3));
-    assertNotNull(gridFSDBFile.getMD5());
     assertNotNull(gridFSDBFile.getUploadDate());
     assertNotNull(gridFSDBFile.getChunkSize());
     assertThat(document.get("_contentType"), is("image/png"));

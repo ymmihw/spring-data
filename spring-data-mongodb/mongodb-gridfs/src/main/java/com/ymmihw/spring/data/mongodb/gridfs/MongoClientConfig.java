@@ -12,5 +12,4 @@ public class MongoClientConfig {
     MongoClient client = MongoClients.create("mongodb://192.168.10.177:27017");
     return client;
   }
-
 }
