@@ -23,18 +23,6 @@
    <groupId>io.dropwizard.metrics</groupId>
    <artifactId>metrics-core</artifactId>
   </dependency>
-  <!-- <dependency> -->
-  <!-- <groupId>org.cassandraunit</groupId> -->
-  <!-- <artifactId>cassandra-unit-spring</artifactId> -->
-  <!-- <exclusions> -->
-  <!-- <exclusion> -->
-  <!-- <groupId>com.datastax.oss</groupId> -->
-  <!-- <artifactId>java-driver-core</artifactId> -->
-  <!-- </exclusion> -->
-  <!-- </exclusions> -->
-  <!-- <version>4.3.1.0</version> -->
-  <!-- <scope>test</scope> -->
-  <!-- </dependency> -->
   <dependency>
    <groupId>com.datastax.oss</groupId>
    <artifactId>java-driver-core</artifactId>

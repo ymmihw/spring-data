@@ -1,41 +1,75 @@
 package com.ymmihw.spring.data.cassandra;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.springframework.data.cassandra.core.query.Query.query;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import org.apache.cassandra.exceptions.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.thrift.transport.TTransportException;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.core.CassandraAdminTemplate;
 import org.springframework.data.cassandra.core.CassandraTemplate;
-import org.springframework.data.cassandra.core.cql.CqlIdentifier;
+import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.testcontainers.containers.CassandraContainer;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.querybuilder.Insert;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.utils.UUIDs;
+import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.google.common.collect.ImmutableSet;
-import com.ymmihw.spring.data.cassandra.config.CassandraConfig;
+import com.ymmihw.spring.data.cassandra.CassandraTemplateIntegrationTest.DockerCassandraConfig;
 import com.ymmihw.spring.data.cassandra.model.Book;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CassandraConfig.class)
+@ContextConfiguration(classes = DockerCassandraConfig.class)
 public class CqlQueriesIntegrationTest {
+  @Configuration
+  @PropertySource(value = {"classpath:cassandra.properties"})
+  @EnableCassandraRepositories(basePackages = "com.ymmihw.spring.data.cassandra.repository")
+  public static class DockerCassandraConfig extends AbstractCassandraConfiguration {
+    @Autowired
+    private Environment environment;
+
+    @Override
+    protected String getKeyspaceName() {
+      return environment.getProperty("cassandra.keyspace");
+    }
+
+    @Override
+    protected String getContactPoints() {
+      return container.getContainerIpAddress();
+    }
+
+    @Override
+    protected int getPort() {
+      return container.getFirstMappedPort();
+    }
+
+    @Override
+    protected String getLocalDataCenter() {
+      return "datacenter1";
+    }
+
+  }
+
+  @ClassRule
+  public static CassandraContainer<?> container = new CassandraContainer<>("cassandra:3.11.6");
+
+
   private static final Log LOGGER = LogFactory.getLog(CqlQueriesIntegrationTest.class);
 
   public static final String KEYSPACE_CREATION_QUERY = "CREATE KEYSPACE IF NOT EXISTS testKeySpace "
@@ -51,14 +85,12 @@ public class CqlQueriesIntegrationTest {
   @Autowired
   private CassandraTemplate cassandraTemplate;
 
-  //
-
   @BeforeClass
-  public static void startCassandraEmbedded()
-      throws InterruptedException, TTransportException, ConfigurationException, IOException {
-    EmbeddedCassandraServerHelper.startEmbeddedCassandra(25000);
-    final Cluster cluster = Cluster.builder().addContactPoints("127.0.0.1").withPort(9142).build();
-    LOGGER.info("Server Started at 127.0.0.1:9142... ");
+  public static void startCassandraEmbedded() throws InterruptedException, IOException {
+    container.start();
+    Cluster cluster =
+        Cluster.builder().withoutMetrics().addContactPoints(container.getContainerIpAddress())
+            .withPort(container.getFirstMappedPort()).build();
     final Session session = cluster.connect();
     session.execute(KEYSPACE_CREATION_QUERY);
     session.execute(KEYSPACE_ACTIVATE_QUERY);
@@ -67,21 +99,18 @@ public class CqlQueriesIntegrationTest {
   }
 
   @Before
-  public void createTable()
-      throws InterruptedException, TTransportException, ConfigurationException, IOException {
-    adminTemplate.createTable(true, CqlIdentifier.of(DATA_TABLE_NAME), Book.class,
+  public void createTable() throws InterruptedException, IOException {
+    adminTemplate.createTable(true, CqlIdentifier.fromCql(DATA_TABLE_NAME), Book.class,
         new HashMap<String, Object>());
   }
 
   @Test
   public void whenSavingBook_thenAvailableOnRetrieval_usingQueryBuilder() {
     final UUID uuid = UUIDs.timeBased();
-    final Insert insert =
-        QueryBuilder.insertInto(DATA_TABLE_NAME).value("id", uuid).value("title", "Head First Java")
-            .value("publisher", "OReilly Media").value("tags", ImmutableSet.of("Software"));
-    cassandraTemplate.getCqlOperations().execute(insert);
-    final Select select = QueryBuilder.select().from("book").limit(10);
-    final Book retrievedBook = cassandraTemplate.selectOne(select, Book.class);
+    final String insertCql = "insert into book (id, title, publisher, tags) values " + "(" + uuid
+        + ", 'Head First Java', 'OReilly Media', {'Software'})";
+    cassandraTemplate.getCqlOperations().execute(insertCql);
+    final Book retrievedBook = cassandraTemplate.selectOne(query().limit(10), Book.class);
     assertEquals(uuid, retrievedBook.getId());
   }
 
@@ -91,8 +120,7 @@ public class CqlQueriesIntegrationTest {
     final String insertCql = "insert into book (id, title, publisher, tags) values " + "(" + uuid
         + ", 'Head First Java', 'OReilly Media', {'Software'})";
     cassandraTemplate.getCqlOperations().execute(insertCql);
-    final Select select = QueryBuilder.select().from("book").limit(10);
-    final Book retrievedBook = cassandraTemplate.selectOne(select, Book.class);
+    final Book retrievedBook = cassandraTemplate.selectOne(query().limit(10), Book.class);
     assertEquals(uuid, retrievedBook.getId());
   }
 
@@ -112,19 +140,13 @@ public class CqlQueriesIntegrationTest {
     cassandraTemplate.getCqlOperations().execute(insertPreparedCql, bookList);
     // This may not be required, just added to avoid any transient issues
     Thread.sleep(5000);
-    final Select select = QueryBuilder.select().from("book");
-    final Book retrievedBook = cassandraTemplate.selectOne(select, Book.class);
+    final Book retrievedBook = cassandraTemplate.selectOne(query(), Book.class);
     assertEquals(uuid, retrievedBook.getId());
   }
 
   @After
   public void dropTable() {
-    adminTemplate.dropTable(CqlIdentifier.of(DATA_TABLE_NAME));
-  }
-
-  @AfterClass
-  public static void stopCassandraEmbedded() {
-    EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
+    adminTemplate.dropTable(CqlIdentifier.fromCql(DATA_TABLE_NAME));
   }
 
 }
