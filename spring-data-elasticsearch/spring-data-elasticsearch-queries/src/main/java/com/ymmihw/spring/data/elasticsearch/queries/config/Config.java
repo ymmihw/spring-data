@@ -1,11 +1,11 @@
 package com.ymmihw.spring.data.elasticsearch.queries.config;
 
-import org.elasticsearch.client.Client;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import lombok.RequiredArgsConstructor;
 
@@ -14,10 +14,10 @@ import lombok.RequiredArgsConstructor;
 @ComponentScan(basePackages = {"com.ymmihw.spring.data.elasticsearch.queries.service"})
 @RequiredArgsConstructor
 public class Config {
-  private final Client client;
+  private final RestHighLevelClient client;
 
   @Bean
-  public ElasticsearchOperations elasticsearchTemplate() {
-    return new ElasticsearchTemplate(client);
+  public ElasticsearchOperations elasticsearchOperations() {
+    return new ElasticsearchRestTemplate(client);
   }
 }
