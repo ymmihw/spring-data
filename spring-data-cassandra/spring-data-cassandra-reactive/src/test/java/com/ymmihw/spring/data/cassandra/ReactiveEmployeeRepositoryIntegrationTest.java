@@ -29,7 +29,7 @@ import reactor.test.StepVerifier;
 @ContextConfiguration(classes = DockerCassandraConfig.class)
 public class ReactiveEmployeeRepositoryIntegrationTest {
   @Configuration
-  @EnableCassandraRepositories(basePackages = "com.ymmihw.spring.data.cassandra")
+  @EnableCassandraRepositories(basePackages = "com.ymmihw.spring.data.cassandra.repository")
   public static class DockerCassandraConfig extends AbstractCassandraConfiguration {
     @Override
     protected String getKeyspaceName() {
