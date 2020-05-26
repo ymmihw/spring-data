@@ -22,7 +22,7 @@ import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.BucketOrder;
-import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -171,7 +171,7 @@ public class ElasticSearchQueryIntegrationTest {
     SearchHits<Article> searchHits = elasticsearchOperations.search(query, Article.class);
     Aggregations aggregations = searchHits.getAggregations();
     final Map<String, Aggregation> results = aggregations.asMap();
-    final StringTerms topTags = (StringTerms) results.get("top_tags");
+    final ParsedStringTerms topTags = (ParsedStringTerms) results.get("top_tags");
 
     final List<String> keys =
         topTags.getBuckets().stream().map(b -> b.getKeyAsString()).collect(toList());
@@ -188,7 +188,7 @@ public class ElasticSearchQueryIntegrationTest {
     SearchHits<Article> searchHits = elasticsearchOperations.search(query, Article.class);
     Aggregations aggregations = searchHits.getAggregations();
     final Map<String, Aggregation> results = aggregations.asMap();
-    final StringTerms topTags = (StringTerms) results.get("top_tags");
+    final ParsedStringTerms topTags = (ParsedStringTerms) results.get("top_tags");
 
     final List<String> keys =
         topTags.getBuckets().stream().map(b -> b.getKeyAsString()).collect(toList());
