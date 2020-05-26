@@ -50,7 +50,7 @@ public class ElasticSearchIntegrationTest {
     @Bean
     public RestHighLevelClient elasticsearchClient() {
       final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-          .connectedTo(container.getContainerIpAddress() + ":" + container.getMappedPort(9300))
+          .connectedTo(container.getContainerIpAddress() + ":" + container.getMappedPort(9200))
           .build();
 
       return RestClients.create(clientConfiguration).rest();
