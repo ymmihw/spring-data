@@ -1,19 +1,23 @@
 package com.ymmihw.spring.data.cassandra;
 
-import org.cassandraunit.spring.CassandraDataSet;
-import org.cassandraunit.spring.CassandraUnitDependencyInjectionTestExecutionListener;
-import org.cassandraunit.spring.CassandraUnitTestExecutionListener;
-import org.cassandraunit.spring.EmbeddedCassandra;
+import java.io.IOException;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
+import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.web.ServletTestExecutionListener;
+import org.testcontainers.containers.CassandraContainer;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+import com.ymmihw.spring.data.cassandra.ReactiveEmployeeRepositoryIntegrationTest.DockerCassandraConfig;
 import com.ymmihw.spring.data.cassandra.model.Employee;
 import com.ymmihw.spring.data.cassandra.repository.EmployeeRepository;
 import reactor.core.publisher.Flux;
@@ -23,15 +27,52 @@ import reactor.test.StepVerifier;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@TestExecutionListeners(listeners = {CassandraUnitDependencyInjectionTestExecutionListener.class,
-    CassandraUnitTestExecutionListener.class, ServletTestExecutionListener.class,
-    DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class})
-@EmbeddedCassandra(timeout = 60000, configuration = "cassandra-server.yaml")
-@CassandraDataSet(value = {"cassandra-init.cql"}, keyspace = "practice")
+@ContextConfiguration(classes = DockerCassandraConfig.class)
 public class ReactiveEmployeeRepositoryIntegrationTest {
+  @Configuration
+  @PropertySource(value = {"classpath:cassandra.properties"})
+  @EnableCassandraRepositories(basePackages = "com.ymmihw.spring.data.cassandra.repository")
+  public static class DockerCassandraConfig extends AbstractCassandraConfiguration {
+    @Override
+    protected String getKeyspaceName() {
+      return "practice";
+    }
+
+    @Override
+    protected String getContactPoints() {
+      return container.getContainerIpAddress();
+    }
+
+    @Override
+    protected int getPort() {
+      return container.getFirstMappedPort();
+    }
+
+    @Override
+    protected String getLocalDataCenter() {
+      return "datacenter1";
+    }
+
+  }
+
+  @ClassRule
+  public static CassandraContainer<?> container = new CassandraContainer<>("cassandra:3.11.6");
 
   @Autowired
   EmployeeRepository repository;
+
+
+  @BeforeClass
+  public static void startCassandraEmbedded() throws InterruptedException, IOException {
+    container.start();
+    Cluster cluster =
+        Cluster.builder().withoutMetrics().addContactPoints(container.getContainerIpAddress())
+            .withPort(container.getFirstMappedPort()).build();
+    final Session session = cluster.connect();
+    session.execute(
+        "CREATE TABLE employee(id int PRIMARY KEY,name text,address text,email text,age int);");
+    Thread.sleep(5000);
+  }
 
   @Before
   public void setUp() {
