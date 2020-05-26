@@ -74,10 +74,10 @@ public class ReactiveEmployeeRepositoryIntegrationTest {
         Cluster.builder().withoutMetrics().addContactPoints(container.getContainerIpAddress())
             .withPort(container.getFirstMappedPort()).build();
     final Session session = cluster.connect();
-    session.execute(
-        "CREATE TABLE employee(id int PRIMARY KEY,name text,address text,email text,age int);");
     session.execute(KEYSPACE_CREATION_QUERY);
     session.execute(KEYSPACE_ACTIVATE_QUERY);
+    session.execute(
+        "CREATE TABLE employee(id int PRIMARY KEY,name text,address text,email text,age int);");
     Thread.sleep(5000);
   }
 
