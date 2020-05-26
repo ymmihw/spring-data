@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
-import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.CassandraContainer;
@@ -24,10 +23,10 @@ import reactor.test.StepVerifier;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DockerCassandraConfig.class)
+@ContextConfiguration(
+    classes = {DockerCassandraConfig.class, SpringDataCassandraReactiveApplication.class})
 public class ReactiveEmployeeRepositoryIntegrationTest {
   @Configuration
-  @EnableCassandraRepositories(basePackages = "com.ymmihw.spring.data.cassandra.repository")
   public static class DockerCassandraConfig extends AbstractCassandraConfiguration {
     @Override
     protected String getKeyspaceName() {
