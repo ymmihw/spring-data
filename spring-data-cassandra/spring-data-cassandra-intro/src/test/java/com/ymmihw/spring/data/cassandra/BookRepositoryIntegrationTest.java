@@ -58,6 +58,11 @@ public class BookRepositoryIntegrationTest {
       return container.getFirstMappedPort();
     }
 
+    @Override
+    protected String getLocalDataCenter() {
+      return "dc1";
+    }
+
   }
 
   private static final Log LOGGER = LogFactory.getLog(BookRepositoryIntegrationTest.class);
