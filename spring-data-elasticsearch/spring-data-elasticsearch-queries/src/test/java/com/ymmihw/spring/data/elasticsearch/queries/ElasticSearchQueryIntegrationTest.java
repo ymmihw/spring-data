@@ -165,8 +165,6 @@ public class ElasticSearchQueryIntegrationTest {
   public void givenAnalyzedQuery_whenMakeAggregationOnTermCount_thenEachTokenCountsSeparately() {
     final TermsAggregationBuilder aggregation =
         AggregationBuilders.terms("top_tags").field("title.text");
-    // final SearchResponse response = client.prepareSearch("blog").setTypes("article")
-    // .addAggregation(aggregation).execute().actionGet();
     Query query = new NativeSearchQueryBuilder().addAggregation(aggregation).build();
     SearchHits<Article> searchHits = elasticsearchOperations.search(query, Article.class);
     Aggregations aggregations = searchHits.getAggregations();
