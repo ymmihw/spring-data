@@ -5,14 +5,8 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.TransportAddress;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -22,7 +16,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.RestClients;
+import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ymmihw.spring.data.elasticsearch.MyElasticsearchContainer;
@@ -39,26 +36,22 @@ public class ElasticSearchIntegrationTest {
   public static MyElasticsearchContainer container = MyElasticsearchContainer.getInstance();
 
   @Configuration
-  public static class DockerClient {
-    @Bean
-    public Client client() {
-      Settings settings = Settings.builder().put("client.transport.sniff", false).build();
-      @SuppressWarnings("resource")
-      PreBuiltTransportClient preBuiltTransportClient = new PreBuiltTransportClient(settings);
-      try {
-        TransportClient addTransportAddress = preBuiltTransportClient.addTransportAddress(
-            new TransportAddress(InetAddress.getByName(container.getContainerIpAddress()),
-                container.getMappedPort(9300)));
-        return addTransportAddress;
-      } catch (final UnknownHostException ioex) {
-        throw new RuntimeException(ioex);
-      }
+  public static class DockerClient extends AbstractElasticsearchConfiguration {
 
+    @Override
+    @Bean
+    public RestHighLevelClient elasticsearchClient() {
+      final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
+          .connectedTo(container.getContainerIpAddress() + ":" + container.getMappedPort(9200))
+          .build();
+
+      return RestClients.create(clientConfiguration).rest();
     }
+
   }
 
   @Autowired
-  private ElasticsearchTemplate elasticsearchTemplate;
+  private ElasticsearchOperations elasticsearchOperations;
 
   @Autowired
   private ArticleService articleService;
@@ -68,10 +61,10 @@ public class ElasticSearchIntegrationTest {
 
   @Before
   public void before() {
-    elasticsearchTemplate.deleteIndex(Article.class);
-    elasticsearchTemplate.createIndex(Article.class);
-    elasticsearchTemplate.putMapping(Article.class);
-    elasticsearchTemplate.refresh(Article.class);
+    elasticsearchOperations.deleteIndex(Article.class);
+    elasticsearchOperations.createIndex(Article.class);
+    elasticsearchOperations.putMapping(Article.class);
+    elasticsearchOperations.refresh(Article.class);
     // don't call putMapping() to test the default mappings
 
     Article article = new Article("Spring Data Elasticsearch");
