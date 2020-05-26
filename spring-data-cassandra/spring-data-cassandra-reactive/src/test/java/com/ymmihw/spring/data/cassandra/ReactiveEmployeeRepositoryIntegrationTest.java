@@ -7,12 +7,11 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.CassandraContainer;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
@@ -24,8 +23,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DockerCassandraConfig.class)
 public class ReactiveEmployeeRepositoryIntegrationTest {
   @Configuration
