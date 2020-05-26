@@ -14,14 +14,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.apache.lucene.search.join.ScoreMode;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
@@ -37,6 +36,7 @@ import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
@@ -75,9 +75,6 @@ public class ElasticSearchQueryIntegrationTest {
 
   @Autowired
   private ArticleService articleService;
-
-  @Autowired
-  private Client client;
 
   private final Author johnSmith = new Author("John Smith");
   private final Author johnDoe = new Author("John Doe");
@@ -168,10 +165,12 @@ public class ElasticSearchQueryIntegrationTest {
   public void givenAnalyzedQuery_whenMakeAggregationOnTermCount_thenEachTokenCountsSeparately() {
     final TermsAggregationBuilder aggregation =
         AggregationBuilders.terms("top_tags").field("title.text");
-    final SearchResponse response = client.prepareSearch("blog").setTypes("article")
-        .addAggregation(aggregation).execute().actionGet();
-
-    final Map<String, Aggregation> results = response.getAggregations().asMap();
+    // final SearchResponse response = client.prepareSearch("blog").setTypes("article")
+    // .addAggregation(aggregation).execute().actionGet();
+    Query query = new NativeSearchQueryBuilder().addAggregation(aggregation).build();
+    SearchHits<Article> searchHits = elasticsearchOperations.search(query, Article.class);
+    Aggregations aggregations = searchHits.getAggregations();
+    final Map<String, Aggregation> results = aggregations.asMap();
     final StringTerms topTags = (StringTerms) results.get("top_tags");
 
     final List<String> keys =
@@ -185,10 +184,10 @@ public class ElasticSearchQueryIntegrationTest {
   public void givenNotAnalyzedQuery_whenMakeAggregationOnTermCount_thenEachTermCountsIndividually() {
     final TermsAggregationBuilder aggregation =
         AggregationBuilders.terms("top_tags").field("tags").order(BucketOrder.count(false));
-    final SearchResponse response = client.prepareSearch("blog").setTypes("article")
-        .addAggregation(aggregation).execute().actionGet();
-
-    final Map<String, Aggregation> results = response.getAggregations().asMap();
+    Query query = new NativeSearchQueryBuilder().addAggregation(aggregation).build();
+    SearchHits<Article> searchHits = elasticsearchOperations.search(query, Article.class);
+    Aggregations aggregations = searchHits.getAggregations();
+    final Map<String, Aggregation> results = aggregations.asMap();
     final StringTerms topTags = (StringTerms) results.get("top_tags");
 
     final List<String> keys =
