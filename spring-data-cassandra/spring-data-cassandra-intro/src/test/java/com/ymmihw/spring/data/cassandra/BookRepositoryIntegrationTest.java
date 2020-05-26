@@ -89,8 +89,6 @@ public class BookRepositoryIntegrationTest {
     Cluster cluster =
         Cluster.builder().withoutMetrics().addContactPoints(container.getContainerIpAddress())
             .withPort(container.getFirstMappedPort()).build();
-    // Cluster cluster = Cluster.open();
-    // LOGGER.info("Server Started at 127.0.0.1:9142... ");
     final Session session = cluster.connect();
     session.execute(KEYSPACE_CREATION_QUERY);
     session.execute(KEYSPACE_ACTIVATE_QUERY);
@@ -163,10 +161,4 @@ public class BookRepositoryIntegrationTest {
   public void dropTable() {
     adminTemplate.dropTable(CqlIdentifier.fromCql(DATA_TABLE_NAME));
   }
-
-  // @AfterClass
-  // public static void stopCassandraEmbedded() {
-  // EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
-  // }
-
 }
