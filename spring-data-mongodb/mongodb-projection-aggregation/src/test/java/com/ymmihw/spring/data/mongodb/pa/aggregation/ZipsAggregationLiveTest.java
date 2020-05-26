@@ -32,7 +32,8 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.ymmihw.spring.data.mongodb.pa.BaseTest;
@@ -40,15 +41,14 @@ import com.ymmihw.spring.data.mongodb.pa.model.StatePopulation;
 
 public class ZipsAggregationLiveTest extends BaseTest {
 
-  private static MongoClient client;
-
   @Autowired
   private MongoTemplate mongoTemplate;
 
   @BeforeClass
   public static void setupTests() throws Exception {
 
-    client = new MongoClient(container.getContainerIpAddress(), container.getFirstMappedPort());
+    MongoClient client = MongoClients.create(
+        "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
     MongoDatabase testDB = client.getDatabase("test");
     MongoCollection<Document> zipsCollection = testDB.getCollection("zips");
     zipsCollection.drop();
@@ -62,7 +62,8 @@ public class ZipsAggregationLiveTest extends BaseTest {
 
   @AfterClass
   public static void tearDown() throws Exception {
-    client = new MongoClient(container.getContainerIpAddress(), container.getFirstMappedPort());
+    MongoClient client = MongoClients.create(
+        "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
     MongoDatabase testDB = client.getDatabase("test");
     MongoCollection<Document> zipsCollection = testDB.getCollection("zips");
     zipsCollection.drop();
