@@ -14,7 +14,12 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.core.CassandraAdminOperations;
+import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.CassandraContainer;
@@ -22,14 +27,40 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.shaded.guava.common.collect.ImmutableSet;
-import com.ymmihw.spring.data.cassandra.config.CassandraConfig;
+import com.ymmihw.spring.data.cassandra.BookRepositoryIntegrationTest.DockerCassandraConfig;
 import com.ymmihw.spring.data.cassandra.model.Book;
 import com.ymmihw.spring.data.cassandra.model.BookKey;
 import com.ymmihw.spring.data.cassandra.repository.BookRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CassandraConfig.class)
+@ContextConfiguration(classes = DockerCassandraConfig.class)
 public class BookRepositoryIntegrationTest {
+
+  @Configuration
+  @PropertySource(value = {"classpath:cassandra.properties"})
+  @EnableCassandraRepositories(basePackages = "com.ymmihw.spring.data.cassandra.repository")
+  public class DockerCassandraConfig extends AbstractCassandraConfiguration {
+    @Autowired
+    private Environment environment;
+
+    @Override
+    protected String getKeyspaceName() {
+      return environment.getProperty("cassandra.keyspace");
+    }
+
+    @Override
+    protected String getContactPoints() {
+      return container.getContainerIpAddress();
+    }
+
+    @Override
+    protected int getPort() {
+      return container.getFirstMappedPort();
+    }
+
+  }
+
+
   private static final Log LOGGER = LogFactory.getLog(BookRepositoryIntegrationTest.class);
 
   public static final String KEYSPACE_CREATION_QUERY =
@@ -47,8 +78,6 @@ public class BookRepositoryIntegrationTest {
 
   @ClassRule
   public static CassandraContainer<?> container = new CassandraContainer<>("cassandra:3.11.6");
-
-  //
 
   @BeforeClass
   public static void startCassandraEmbedded() throws InterruptedException, IOException {

@@ -1,12 +1,10 @@
 package com.ymmihw.spring.data.cassandra.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
-import org.springframework.data.cassandra.core.mapping.CassandraMappingContext;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 @Configuration
@@ -31,10 +29,4 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     return Integer.parseInt(environment.getProperty("cassandra.port"));
   }
 
-  // @Override
-  // @Bean
-  // @Override
-  // public CassandraMappingContext cassandraMapping() throws ClassNotFoundException {
-  // return new CassandraMappingContext();
-  // }
 }
