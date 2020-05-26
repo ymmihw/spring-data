@@ -31,7 +31,7 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.utils.UUIDs;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.google.common.collect.ImmutableSet;
-import com.ymmihw.spring.data.cassandra.CassandraTemplateIntegrationTest.DockerCassandraConfig;
+import com.ymmihw.spring.data.cassandra.CqlQueriesIntegrationTest.DockerCassandraConfig;
 import com.ymmihw.spring.data.cassandra.model.Book;
 
 @RunWith(SpringJUnit4ClassRunner.class)
