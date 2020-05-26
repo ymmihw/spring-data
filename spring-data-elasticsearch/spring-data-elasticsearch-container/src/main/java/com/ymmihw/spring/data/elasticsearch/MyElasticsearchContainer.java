@@ -4,7 +4,7 @@ import java.util.List;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 
 public class MyElasticsearchContainer extends ElasticsearchContainer {
-  private static final String IMAGE_VERSION = "elasticsearch:6.8.9";
+  private static final String IMAGE_VERSION = "elasticsearch:7.7.0";
   private static MyElasticsearchContainer container;
 
   private MyElasticsearchContainer() {
