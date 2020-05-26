@@ -39,7 +39,7 @@ public class BookRepositoryIntegrationTest {
   @Configuration
   @PropertySource(value = {"classpath:cassandra.properties"})
   @EnableCassandraRepositories(basePackages = "com.ymmihw.spring.data.cassandra.repository")
-  public class DockerCassandraConfig extends AbstractCassandraConfiguration {
+  public static class DockerCassandraConfig extends AbstractCassandraConfiguration {
     @Autowired
     private Environment environment;
 
@@ -59,7 +59,6 @@ public class BookRepositoryIntegrationTest {
     }
 
   }
-
 
   private static final Log LOGGER = LogFactory.getLog(BookRepositoryIntegrationTest.class);
 
