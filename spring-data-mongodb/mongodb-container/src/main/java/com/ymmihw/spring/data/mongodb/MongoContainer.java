@@ -3,7 +3,7 @@ package com.ymmihw.spring.data.mongodb;
 import org.testcontainers.containers.GenericContainer;
 
 public class MongoContainer extends GenericContainer<MongoContainer> {
-  private static final String IMAGE_VERSION = "mongo:4.1.13";
+  private static final String IMAGE_VERSION = "mongo:4.2.8";
   private static MongoContainer container;
 
   public MongoContainer() {
