@@ -1,7 +1,7 @@
 package com.ymmihw.spring.data.mongodb;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import java.io.IOException;
 import java.util.stream.IntStream;
 import org.bson.Document;
