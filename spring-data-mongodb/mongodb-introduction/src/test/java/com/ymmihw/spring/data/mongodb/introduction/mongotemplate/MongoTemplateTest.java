@@ -1,7 +1,7 @@
 package com.ymmihw.spring.data.mongodb.introduction.mongotemplate;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
