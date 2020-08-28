@@ -25,6 +25,8 @@ spring-data-jpa-multiple-databases | [Spring JPA – Multiple Databases](http://
 composable-repositories | [Spring Data Composable Repositories](https://www.baeldung.com/spring-data-composable-repositories)
 query-by-date-and-time | [Query Entities by Dates and Times with Spring Data JPA](https://www.baeldung.com/spring-data-jpa-query-by-date)
 spring-data-jpa-entity-graph | [Spring Data JPA and Named Entity Graphs](https://www.baeldung.com/spring-data-jpa-named-entity-graphs)
+spring-data-jpa-dynamic-table | [JPA - Dynamic Table Names for Entities](https://naveen.me/blog/jpa-dynamic-table-name-entity/)
+
 ---
 
 ### Spring Data Redis
