@@ -1,6 +1,5 @@
 package com.ymmihw.spring.data.rest.validators;
 
-import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import com.ymmihw.spring.data.rest.models.WebsiteUser;

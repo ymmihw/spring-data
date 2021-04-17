@@ -1,14 +1,13 @@
 package com.ymmihw.spring.data.jpa.advanced.tagging;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Resource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 import com.ymmihw.spring.data.jpa.advanced.tagging.dao.ManyStudentRepository;
@@ -20,7 +19,7 @@ import com.ymmihw.spring.data.jpa.advanced.tagging.model.ManyTag;
 import com.ymmihw.spring.data.jpa.advanced.tagging.model.SkillTag;
 import com.ymmihw.spring.data.jpa.advanced.tagging.model.Student;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = {Applicatoin.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
 public class AdvancedTaggingIntegrationTest {
@@ -46,7 +45,7 @@ public class AdvancedTaggingIntegrationTest {
     studentRepository.save(student2);
 
     List<Student> students = studentRepository.retrieveByNameFilterByMinimumSkillTag("java", 3);
-    assertEquals("size incorrect", 1, students.size());
+    assertEquals(1, students.size(), "size incorrect");
   }
 
   @Test
@@ -60,7 +59,7 @@ public class AdvancedTaggingIntegrationTest {
     studentRepository.save(student2);
 
     List<Student> students = studentRepository.retrieveByKeyTag("department");
-    assertEquals("size incorrect", 2, students.size());
+    assertEquals(2, students.size(), "size incorrect");
   }
 
   @Test
@@ -73,6 +72,6 @@ public class AdvancedTaggingIntegrationTest {
     manyStudentRepository.save(student);
 
     List<ManyStudent> students = manyStudentRepository.findByManyTags_Name("full time");
-    assertEquals("size incorrect", 1, students.size());
+    assertEquals(1, students.size(), "size incorrect");
   }
 }

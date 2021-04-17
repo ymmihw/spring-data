@@ -1,11 +1,10 @@
 package com.ymmihw.spring.data.rest;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -14,13 +13,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import com.ymmihw.spring.data.rest.models.Address;
 import com.ymmihw.spring.data.rest.models.Author;
 import com.ymmihw.spring.data.rest.models.Book;
 import com.ymmihw.spring.data.rest.models.Library;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringDataRestApplication.class,
     webEnvironment = WebEnvironment.DEFINED_PORT)
 public class SpringDataRelationshipsIntegrationTest {

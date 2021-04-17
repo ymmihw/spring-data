@@ -1,13 +1,14 @@
 package com.ymmihw.spring.data.jpa.with.spring.security;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.util.Assert.isTrue;
 import java.util.Date;
 import java.util.List;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import com.ymmihw.spring.data.jpa.with.spring.security.data.repositories.TweetRepository;
 import com.ymmihw.spring.data.jpa.with.spring.security.data.repositories.UserRepository;
@@ -24,7 +24,7 @@ import com.ymmihw.spring.data.jpa.with.spring.security.models.AppUser;
 import com.ymmihw.spring.data.jpa.with.spring.security.models.Tweet;
 import com.ymmihw.spring.data.jpa.with.spring.security.security.AppUserPrincipal;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
 @WebAppConfiguration
 @ContextConfiguration(classes = {AppConfig.class})
 @DirtiesContext
@@ -34,14 +34,14 @@ public class SpringDataWithSecurityTest {
   @Autowired
   private TweetRepository tweetRepository;
 
-  @Before
+  @BeforeEach
   public void testInit() {
     List<AppUser> appUsers =
         (List<AppUser>) userRepository.saveAll(DummyContentUtil.generateDummyUsers());
     tweetRepository.saveAll(DummyContentUtil.generateDummyTweets(appUsers));
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     tweetRepository.deleteAll();
     userRepository.deleteAll();
@@ -56,9 +56,10 @@ public class SpringDataWithSecurityTest {
     userRepository.updateLastLogin(new Date());
   }
 
-  @Test(expected = InvalidDataAccessApiUsageException.class)
+  @Test
   public void givenNoAppUserInSecurityContext_whenUpdateLastLoginAttempted_shouldFail() {
-    userRepository.updateLastLogin(new Date());
+    assertThrows(InvalidDataAccessApiUsageException.class,
+        () -> userRepository.updateLastLogin(new Date()));
   }
 
   @Test
@@ -78,12 +79,14 @@ public class SpringDataWithSecurityTest {
     } while (page.hasNext());
   }
 
-  @Test(expected = InvalidDataAccessApiUsageException.class)
+  @Test
   public void givenNoAppUser_whenPaginatedResultsRetrievalAttempted_shouldFail() {
-    Page<Tweet> page = null;
-    do {
-      page = tweetRepository
-          .getMyTweetsAndTheOnesILiked(PageRequest.of(page != null ? page.getNumber() + 1 : 0, 5));
-    } while (page != null && page.hasNext());
+    assertThrows(InvalidDataAccessApiUsageException.class, () -> {
+      Page<Tweet> page = null;
+      do {
+        page = tweetRepository.getMyTweetsAndTheOnesILiked(
+            PageRequest.of(page != null ? page.getNumber() + 1 : 0, 5));
+      } while (page != null && page.hasNext());
+    });
   }
 }

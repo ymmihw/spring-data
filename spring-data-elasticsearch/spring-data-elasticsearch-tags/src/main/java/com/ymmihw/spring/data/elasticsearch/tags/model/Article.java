@@ -1,7 +1,7 @@
 package com.ymmihw.spring.data.elasticsearch.tags.model;
 
-import static org.springframework.data.elasticsearch.annotations.FieldType.Nested;
 import static org.springframework.data.elasticsearch.annotations.FieldType.Keyword;
+import static org.springframework.data.elasticsearch.annotations.FieldType.Nested;
 import static org.springframework.data.elasticsearch.annotations.FieldType.Text;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.InnerField;
 import org.springframework.data.elasticsearch.annotations.MultiField;
 
-@Document(indexName = "blog", type = "article")
+@Document(indexName = "blog", indexStoreType = "article")
 public class Article {
 
   @Id

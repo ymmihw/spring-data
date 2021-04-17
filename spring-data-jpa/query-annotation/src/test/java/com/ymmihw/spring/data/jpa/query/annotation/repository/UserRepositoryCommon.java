@@ -1,14 +1,15 @@
 package com.ymmihw.spring.data.jpa.query.annotation.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -267,7 +268,7 @@ public abstract class UserRepositoryCommon {
     assertThat(usersSortByName.get(0).getName()).isEqualTo(USER_NAME_ADAM);
   }
 
-  @Test(expected = PropertyReferenceException.class)
+  @Test
   public void givenUsersInDB_WhenFindAllSortWithFunction_ThenThrowException() {
     userRepository.save(new User(USER_NAME_ADAM, USER_EMAIL, ACTIVE_STATUS));
     userRepository.save(new User(USER_NAME_PETER, USER_EMAIL2, ACTIVE_STATUS));
@@ -275,9 +276,9 @@ public abstract class UserRepositoryCommon {
 
     userRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
 
-    List<User> usersSortByNameLength = userRepository.findAll(Sort.by("LENGTH(name)"));
-
-    assertThat(usersSortByNameLength.get(0).getName()).isEqualTo(USER_NAME_ADAM);
+    assertThrows(PropertyReferenceException.class, () -> {
+      userRepository.findAll(Sort.by("LENGTH(name)"));
+    });
   }
 
   @Test
@@ -395,7 +396,7 @@ public abstract class UserRepositoryCommon {
     assertThat(userPeter.getEmail()).isEqualTo(USER_EMAIL2);
   }
 
-  @After
+  @AfterEach
   public void cleanUp() {
     userRepository.deleteAll();
   }

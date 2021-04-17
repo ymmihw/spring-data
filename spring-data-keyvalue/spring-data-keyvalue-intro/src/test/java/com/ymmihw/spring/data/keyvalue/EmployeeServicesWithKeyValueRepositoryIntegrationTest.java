@@ -1,23 +1,20 @@
 package com.ymmihw.spring.data.keyvalue;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.MethodOrderer.MethodName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.keyvalue.core.KeyValueTemplate;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import com.ymmihw.spring.data.keyvalue.services.EmployeeService;
 import com.ymmihw.spring.data.keyvalue.vo.Employee;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringDataKeyValueApplication.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodName.class)
 public class EmployeeServicesWithKeyValueRepositoryIntegrationTest {
 
   @Autowired
@@ -32,7 +29,7 @@ public class EmployeeServicesWithKeyValueRepositoryIntegrationTest {
 
   static Employee employee2;
 
-  @BeforeClass
+  @BeforeTestClass
   public static void setUp() {
     employee1 = new Employee(1, "Karan", "IT", "5000");
     employee2 = new Employee(2, "Jack", "HR", "2000");

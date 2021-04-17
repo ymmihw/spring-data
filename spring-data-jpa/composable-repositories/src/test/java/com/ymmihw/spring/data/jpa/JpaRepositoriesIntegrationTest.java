@@ -1,18 +1,17 @@
 package com.ymmihw.spring.data.jpa;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 import com.ymmihw.spring.data.jpa.domain.Item;
 import com.ymmihw.spring.data.jpa.domain.ItemType;
 import com.ymmihw.spring.data.jpa.domain.Location;
@@ -21,7 +20,7 @@ import com.ymmihw.spring.data.jpa.repository.ItemTypeRepository;
 import com.ymmihw.spring.data.jpa.repository.LocationRepository;
 import com.ymmihw.spring.data.jpa.repository.StoreRepository;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
 @DataJpaTest
 @ContextConfiguration(classes = {Application.class})
 public class JpaRepositoriesIntegrationTest {
@@ -42,8 +41,8 @@ public class JpaRepositoriesIntegrationTest {
     location = locationRepository.saveAndFlush(location);
 
     Location otherLocation = locationRepository.getOne(location.getId());
-    assertEquals("Country H", otherLocation.getCountry());
-    assertEquals("City Hundred", otherLocation.getCity());
+    assertEquals(otherLocation.getCountry(), "Country H");
+    assertEquals(otherLocation.getCity(), "City Hundred");
 
     locationRepository.delete(otherLocation);
   }

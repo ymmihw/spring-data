@@ -1,7 +1,7 @@
 package com.ymmihw.spring.data.rest;
 
 import static org.mockito.Mockito.mock;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import com.ymmihw.spring.data.rest.evets.BookEventHandler;
 import com.ymmihw.spring.data.rest.models.Author;

@@ -1,16 +1,14 @@
 package com.ymmihw.spring.data.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.junit4.SpringRunner;
 import com.ymmihw.spring.data.rest.models.Author;
 import com.ymmihw.spring.data.rest.models.Book;
 import com.ymmihw.spring.data.rest.repositories.AuthorRepository;
@@ -18,7 +16,6 @@ import com.ymmihw.spring.data.rest.repositories.BookRepository;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringDataRestApplication.class,
     webEnvironment = WebEnvironment.DEFINED_PORT)
 
@@ -33,7 +30,7 @@ public class SpringDataProjectionIntegrationTest {
   @Autowired
   private AuthorRepository authorRepo;
 
-  @Before
+  @BeforeEach
   public void setup() {
     if (!bookRepo.findById(1L).isPresent()) {
       Book book = new Book("Animal Farm");

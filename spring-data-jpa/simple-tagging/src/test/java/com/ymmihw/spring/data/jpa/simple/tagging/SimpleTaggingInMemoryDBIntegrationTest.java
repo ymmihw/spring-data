@@ -1,21 +1,20 @@
 package com.ymmihw.spring.data.jpa.simple.tagging;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Resource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
 import com.ymmihw.spring.data.jpa.simple.tagging.config.JpaConfig;
 import com.ymmihw.spring.data.jpa.simple.tagging.dao.StudentRepository;
 import com.ymmihw.spring.data.jpa.simple.tagging.model.Student;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = {JpaConfig.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
 public class SimpleTaggingInMemoryDBIntegrationTest {
@@ -64,7 +63,7 @@ public class SimpleTaggingInMemoryDBIntegrationTest {
     studentRepository.save(student4);
 
     List<Student> students = studentRepository.retrieveByTag("full time");
-    assertEquals("size incorrect", 2, students.size());
+    assertEquals(2, students.size(), "size incorrect");
   }
 
   @Test

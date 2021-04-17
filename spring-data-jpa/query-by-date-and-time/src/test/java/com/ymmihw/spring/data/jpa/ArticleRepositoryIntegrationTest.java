@@ -1,19 +1,18 @@
 package com.ymmihw.spring.data.jpa;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 import com.ymmihw.spring.data.jpa.domain.Article;
 import com.ymmihw.spring.data.jpa.repository.ArticleRepository;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
 @DataJpaTest
 public class ArticleRepositoryIntegrationTest {
 

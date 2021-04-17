@@ -1,16 +1,14 @@
 package com.ymmihw.spring.data.jpa.query.annotation.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import com.ymmihw.spring.data.jpa.query.annotation.Applicatoin;
 import com.ymmihw.spring.data.jpa.query.annotation.model.User;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest(classes = Applicatoin.class)
 @DirtiesContext
 public class UserRepositoryIntegrationTest extends UserRepositoryCommon {

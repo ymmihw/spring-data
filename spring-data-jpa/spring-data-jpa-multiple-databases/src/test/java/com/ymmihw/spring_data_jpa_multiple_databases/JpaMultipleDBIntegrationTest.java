@@ -1,15 +1,14 @@
 package com.ymmihw.spring_data_jpa_multiple_databases;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import java.util.Arrays;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import com.ymmihw.spring_data_jpa_multiple_databases.config.ProductConfig;
@@ -21,7 +20,7 @@ import com.ymmihw.spring_data_jpa_multiple_databases.persistence.model.product.P
 import com.ymmihw.spring_data_jpa_multiple_databases.persistence.model.user.Possession;
 import com.ymmihw.spring_data_jpa_multiple_databases.persistence.model.user.User;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = {UserConfig.class, ProductConfig.class})
 @EnableTransactionManagement
 public class JpaMultipleDBIntegrationTest {
