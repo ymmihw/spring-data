@@ -49,7 +49,7 @@ public class SpringDataRelationshipsIntegrationTest {
 
     ResponseEntity<Library> libraryGetResponse =
         template.getForEntity(ADDRESS_ENDPOINT + "/1/library", Library.class);
-    assertEquals("library is incorrect", libraryGetResponse.getBody().getName(), LIBRARY_NAME);
+    assertEquals(libraryGetResponse.getBody().getName(), LIBRARY_NAME, "library is incorrect");
   }
 
   @Test
@@ -71,7 +71,7 @@ public class SpringDataRelationshipsIntegrationTest {
 
     ResponseEntity<Library> libraryGetResponse =
         template.getForEntity(BOOK_ENDPOINT + "/1/library", Library.class);
-    assertEquals("library is incorrect", libraryGetResponse.getBody().getName(), LIBRARY_NAME);
+    assertEquals(libraryGetResponse.getBody().getName(), LIBRARY_NAME, "library is incorrect");
   }
 
   @Test
@@ -94,6 +94,6 @@ public class SpringDataRelationshipsIntegrationTest {
     String jsonResponse = template.getForObject(BOOK_ENDPOINT + "/1/authors", String.class);
     JSONObject jsonObj = new JSONObject(jsonResponse).getJSONObject("_embedded");
     JSONArray jsonArray = jsonObj.getJSONArray("authors");
-    assertEquals("author is incorrect", jsonArray.getJSONObject(0).getString("name"), AUTHOR_NAME);
+    assertEquals(jsonArray.getJSONObject(0).getString("name"), AUTHOR_NAME, "author is incorrect");
   }
 }

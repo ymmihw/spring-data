@@ -31,7 +31,7 @@ public class SimpleTaggingInMemoryDBIntegrationTest {
     studentRepository.save(student);
 
     Optional<Student> student2 = studentRepository.findById(ID);
-    assertEquals("name incorrect", NAME, student2.get().getName());
+    assertEquals(NAME, student2.get().getName(), "name incorrect");
   }
 
   @Test
@@ -41,7 +41,7 @@ public class SimpleTaggingInMemoryDBIntegrationTest {
     studentRepository.save(student);
 
     Student student2 = studentRepository.retrieveByTag("full time").get(0);
-    assertEquals("name incorrect", NAME, student2.getName());
+    assertEquals(NAME, student2.getName(), "name incorrect");
   }
 
   @Test
@@ -73,7 +73,7 @@ public class SimpleTaggingInMemoryDBIntegrationTest {
     studentRepository.save(student);
 
     Student student2 = studentRepository.retrieveByNameFilterByTag("John", "full time").get(0);
-    assertEquals("name incorrect", NAME, student2.getName());
+    assertEquals(NAME, student2.getName(), "name incorrect");
   }
 
 }

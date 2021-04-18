@@ -10,7 +10,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import com.ymmihw.spring.data.jpa.domain.Item;
 import com.ymmihw.spring.data.jpa.domain.ItemType;
@@ -20,7 +19,6 @@ import com.ymmihw.spring.data.jpa.repository.ItemTypeRepository;
 import com.ymmihw.spring.data.jpa.repository.LocationRepository;
 import com.ymmihw.spring.data.jpa.repository.StoreRepository;
 
-@SpringBootTest
 @DataJpaTest
 @ContextConfiguration(classes = {Application.class})
 public class JpaRepositoriesIntegrationTest {
