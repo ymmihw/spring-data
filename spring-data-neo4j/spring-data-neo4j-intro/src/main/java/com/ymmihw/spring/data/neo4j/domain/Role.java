@@ -1,49 +1,24 @@
 package com.ymmihw.spring.data.neo4j.domain;
 
 import java.util.Collection;
-import org.neo4j.ogm.annotation.EndNode;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.RelationshipEntity;
-import org.neo4j.ogm.annotation.StartNode;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.voodoodyne.jackson.jsog.JSOGGenerator;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.RelationshipProperties;
+import org.springframework.data.neo4j.core.schema.TargetNode;
+import lombok.Getter;
+import lombok.Setter;
 
-@JsonIdentityInfo(generator = JSOGGenerator.class)
-@RelationshipEntity(type = "ACTED_IN")
+@RelationshipProperties
+@Getter
+@Setter
 public class Role {
   @Id
   @GeneratedValue
-  Long id;
+  private Long id;
   private Collection<String> roles;
-  @StartNode
-  private Person person;
-  @EndNode
+//  @TargetNode
+//  private Person person;
+  @TargetNode
   private Movie movie;
 
-  public Role() {}
-
-  public Collection<String> getRoles() {
-    return roles;
-  }
-
-  public Person getPerson() {
-    return person;
-  }
-
-  public Movie getMovie() {
-    return movie;
-  }
-
-  public void setRoles(Collection<String> roles) {
-    this.roles = roles;
-  }
-
-  public void setPerson(Person person) {
-    this.person = person;
-  }
-
-  public void setMovie(Movie movie) {
-    this.movie = movie;
-  }
 }

@@ -1,30 +1,55 @@
 package com.ymmihw.spring.data.neo4j.repository;
 
-import static junit.framework.TestCase.assertNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.neo4j.harness.ServerControls;
+import org.neo4j.harness.TestServerBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import com.ymmihw.spring.data.neo4j.config.MovieDatabaseNeo4jTestConfiguration;
 import com.ymmihw.spring.data.neo4j.domain.Movie;
 import com.ymmihw.spring.data.neo4j.domain.Person;
 import com.ymmihw.spring.data.neo4j.domain.Role;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@DataNeo4jTest
 @ContextConfiguration(classes = MovieDatabaseNeo4jTestConfiguration.class)
-@ActiveProfiles(profiles = "test")
 public class MovieRepositoryIntegrationTest {
+
+  private static ServerControls embeddedDatabaseServer;
+
+  @BeforeAll
+  static void initializeNeo4j() {
+
+    embeddedDatabaseServer = TestServerBuilders.newInProcessBuilder().newServer();
+  }
+
+  @AfterAll
+  static void stopNeo4j() {
+
+    embeddedDatabaseServer.close();
+  }
+
+  @DynamicPropertySource
+  static void neo4jProperties(DynamicPropertyRegistry registry) {
+
+    registry.add("spring.neo4j.uri", embeddedDatabaseServer::boltURI);
+    registry.add("spring.neo4j.authentication.username", () -> "neo4j");
+    registry.add("spring.neo4j.authentication.password", () -> null);
+  }
 
   @Autowired
   private MovieRepository movieRepository;
@@ -32,9 +57,8 @@ public class MovieRepositoryIntegrationTest {
   @Autowired
   private PersonRepository personRepository;
 
-  public MovieRepositoryIntegrationTest() {}
 
-  @Before
+  @BeforeEach
   public void initializeDatabase() {
     System.out.println("seeding embedded database");
     Movie italianJob = new Movie();
@@ -48,7 +72,7 @@ public class MovieRepositoryIntegrationTest {
 
     Role charlie = new Role();
     charlie.setMovie(italianJob);
-    charlie.setPerson(mark);
+    // charlie.setPerson(mark);
     Collection<String> roleNames = new HashSet<>();
     roleNames.add("Charlie Croker");
     charlie.setRoles(roleNames);
@@ -56,6 +80,11 @@ public class MovieRepositoryIntegrationTest {
     roles.add(charlie);
     italianJob.setRoles(roles);
     movieRepository.save(italianJob);
+
+    List<Movie> movies = new ArrayList<>();
+    movies.add(italianJob);
+    mark.setMovies(movies);
+    personRepository.save(mark);
   }
 
   @Test
@@ -81,7 +110,7 @@ public class MovieRepositoryIntegrationTest {
   @DirtiesContext
   public void testFindAll() {
     System.out.println("findAll");
-    Collection<Movie> result = (Collection<Movie>) movieRepository.findAll();
+    Collection<Movie> result = movieRepository.findAll();
     assertNotNull(result);
     assertEquals(1, result.size());
   }
@@ -123,7 +152,7 @@ public class MovieRepositoryIntegrationTest {
   public void testDeleteAll() {
     System.out.println("deleteAll");
     movieRepository.deleteAll();
-    Collection<Movie> result = (Collection<Movie>) movieRepository.findAll();
+    Collection<Movie> result = movieRepository.findAll();
     assertEquals(0, result.size());
   }
 }
