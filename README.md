@@ -27,7 +27,7 @@ query-by-date-and-time | [Query Entities by Dates and Times with Spring Data JPA
 spring-data-jpa-entity-graph | [Spring Data JPA and Named Entity Graphs](https://www.baeldung.com/spring-data-jpa-named-entity-graphs)
 spring-data-jpa-dynamic-table | [JPA - Dynamic Table Names for Entities](https://naveen.me/blog/jpa-dynamic-table-name-entity/)
 spring-data-jpa-lock-annotation | [Spring Data JPA - Applying Pessimistic Locking with @Lock Annotation](https://www.logicbig.com/tutorials/spring-framework/spring-data/pessimistic-locking-and-lock-annotation.html)
-
+auditing | [Auditing with JPA, Hibernate, and Spring Data JPA](http://www.baeldung.com/database-auditing-jpa)
 ---
 
 ### Spring Data Redis

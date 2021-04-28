@@ -43,5 +43,6 @@
   <module>spring-data-jpa-entity-graph</module>
   <module>spring-data-jpa-dynamic-table</module>
   <module>spring-data-jpa-lock-annotation</module>
+  <module>auditing</module>
  </modules>
 </project>
