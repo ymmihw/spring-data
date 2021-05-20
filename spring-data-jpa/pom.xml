@@ -44,5 +44,6 @@
   <module>spring-data-jpa-dynamic-table</module>
   <module>spring-data-jpa-lock-annotation</module>
   <module>auditing</module>
+     <module>spring-data-jpa-soft-delete</module>
  </modules>
 </project>

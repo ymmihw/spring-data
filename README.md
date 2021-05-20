@@ -28,6 +28,7 @@ spring-data-jpa-entity-graph | [Spring Data JPA and Named Entity Graphs](https:/
 spring-data-jpa-dynamic-table | [JPA - Dynamic Table Names for Entities](https://naveen.me/blog/jpa-dynamic-table-name-entity/)
 spring-data-jpa-lock-annotation | [Spring Data JPA - Applying Pessimistic Locking with @Lock Annotation](https://www.logicbig.com/tutorials/spring-framework/spring-data/pessimistic-locking-and-lock-annotation.html)
 auditing | [Auditing with JPA, Hibernate, and Spring Data JPA](http://www.baeldung.com/database-auditing-jpa)
+spring-data-jpa-soft-delete | [How to Implement a Soft Delete with Spring JPA](https://www.baeldung.com/spring-jpa-soft-delete)
 ---
 
 ### Spring Data Redis
