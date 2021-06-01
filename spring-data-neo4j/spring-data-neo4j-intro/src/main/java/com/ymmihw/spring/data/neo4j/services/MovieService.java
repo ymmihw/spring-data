@@ -48,7 +48,8 @@ public class MovieService {
   }
 
   public Map<String, Object> graph(int limit) {
-    Iterator<Map<String, Object>> result = movieRepository.graph(limit).iterator();
-    return toD3Format(result);
+//    Iterator<Map<String, Object>> result = movieRepository.graph(limit).iterator();
+//    return toD3Format(result);
+    return null;
   }
 }
