@@ -1,50 +1,26 @@
 package com.ymmihw.spring.data.neo4j.domain;
 
-import java.util.List;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.voodoodyne.jackson.jsog.JSOGGenerator;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
-@JsonIdentityInfo(generator = JSOGGenerator.class)
-@NodeEntity
+import java.util.List;
+
+@Node
+@Getter
+@Setter
 public class Person {
-  @Id
-  @GeneratedValue
-  Long id;
+  @Id @GeneratedValue private Long id;
 
   private String name;
   private int born;
 
-  @Relationship(type = "ACTED_IN")
+//  @Relationship(type = "ACTED_IN", direction = Relationship.Direction.OUTGOING)
+//  private List<Role> roles;
+
+  @Relationship(type = "ACTED_IN", direction = Relationship.Direction.OUTGOING)
   private List<Movie> movies;
-
-  public Person() {}
-
-  public String getName() {
-    return name;
-  }
-
-  public int getBorn() {
-    return born;
-  }
-
-  public List<Movie> getMovies() {
-    return movies;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void setBorn(int born) {
-    this.born = born;
-  }
-
-  public void setMovies(List<Movie> movies) {
-    this.movies = movies;
-  }
-
 }
