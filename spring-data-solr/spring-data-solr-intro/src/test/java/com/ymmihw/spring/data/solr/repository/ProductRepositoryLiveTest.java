@@ -1,32 +1,36 @@
 package com.ymmihw.spring.data.solr.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import java.util.List;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.ymmihw.spring.data.solr.config.SolrConfig;
+import com.ymmihw.spring.data.solr.model.Product;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.ymmihw.spring.data.solr.config.SolrConfig;
-import com.ymmihw.spring.data.solr.model.Product;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+@SpringBootTest
 @ContextConfiguration(classes = SolrConfig.class)
 @TestPropertySource(properties = {"solr.host=${SOLR_HOST}", "solr.port=${SOLR_PORT}"})
 public class ProductRepositoryLiveTest {
-  @ClassRule
-  public static SolrContainer container = SolrContainer.getInstance();
 
-  @Autowired
-  private ProductRepository productRepository;
+  @Autowired private ProductRepository productRepository;
 
-  @Before
+  @BeforeAll
+  public static void beforeAll() {
+    SolrContainer container = SolrContainer.getInstance();
+    container.start();
+  }
+
+  @BeforeEach
   public void clearSolrData() {
     productRepository.deleteAll();
   }
@@ -66,7 +70,6 @@ public class ProductRepositoryLiveTest {
     productRepository.delete(product);
 
     assertFalse(productRepository.findById(product.getId()).isPresent());
-
   }
 
   @Test
@@ -123,5 +126,4 @@ public class ProductRepositoryLiveTest {
     Page<Product> result = productRepository.findByNamedQuery("one", PageRequest.of(0, 10));
     assertEquals(3, result.getNumberOfElements());
   }
-
 }
