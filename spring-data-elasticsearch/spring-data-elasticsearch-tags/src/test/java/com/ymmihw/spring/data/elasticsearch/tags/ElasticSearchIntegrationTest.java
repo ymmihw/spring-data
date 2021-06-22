@@ -20,6 +20,7 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ymmihw.spring.data.elasticsearch.MyElasticsearchContainer;
@@ -61,10 +62,11 @@ public class ElasticSearchIntegrationTest {
 
   @Before
   public void before() {
-    elasticsearchOperations.deleteIndex(Article.class);
-    elasticsearchOperations.createIndex(Article.class);
-    elasticsearchOperations.putMapping(Article.class);
-    elasticsearchOperations.refresh(Article.class);
+    IndexOperations indexOperations = elasticsearchOperations.indexOps(Article.class);
+    indexOperations.delete();
+    indexOperations.create();
+    indexOperations.putMapping();
+    indexOperations.refresh();
     // don't call putMapping() to test the default mappings
 
     Article article = new Article("Spring Data Elasticsearch");
