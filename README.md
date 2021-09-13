@@ -1,5 +1,9 @@
 ## Relevant Articles:
 
+Module | Article
+--|--
+spring-data-arangodb | [Spring Data with ArangoDB](https://www.baeldung.com/spring-data-arangodb)
+
 ### Spring Data LDAP
 
 Module | Article
