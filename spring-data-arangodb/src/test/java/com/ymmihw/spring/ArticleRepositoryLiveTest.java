@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.arangodb.ArangoDB;
 import com.arangodb.springframework.annotation.EnableArangoRepositories;
 import com.arangodb.springframework.config.ArangoConfiguration;
+import com.ymmihw.spring.ArticleRepositoryLiveTest.ArangoDbDockerConfiguration;
 import com.ymmihw.spring.model.Article;
 import com.ymmihw.spring.repository.ArticleRepository;
 import java.time.ZonedDateTime;
@@ -23,14 +24,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ArticleRepositoryLiveTest.TestArangoDbConfiguration.class})
+@ContextConfiguration(classes = {ArangoDbDockerConfiguration.class})
 public class ArticleRepositoryLiveTest {
 
   @ClassRule public static ArangoContainer container = ArangoContainer.getInstance();
 
   @Configuration
   @EnableArangoRepositories(basePackages = {"com.ymmihw.spring"})
-  public static class TestArangoDbConfiguration implements ArangoConfiguration {
+  public static class ArangoDbDockerConfiguration implements ArangoConfiguration {
 
     @Override
     public ArangoDB.Builder arango() {
