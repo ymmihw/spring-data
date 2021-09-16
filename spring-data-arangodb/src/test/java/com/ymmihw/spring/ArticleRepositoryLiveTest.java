@@ -5,18 +5,24 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.arangodb.ArangoDB;
+import com.arangodb.springframework.annotation.EnableArangoRepositories;
+import com.arangodb.springframework.config.ArangoConfiguration;
 import com.ymmihw.spring.model.Article;
 import com.ymmihw.spring.repository.ArticleRepository;
+
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.testcontainers.junit.jupiter.Container;
@@ -24,129 +30,122 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
 @ContextConfiguration(
-    classes = {
-      //        ArangoDbDockerConfiguration.class
-    },
-    loader = AnnotationConfigContextLoader.class)
+        classes = {
+                ArticleRepositoryLiveTest.ArangoDbDockerConfiguration.class
+        },
+        loader = AnnotationConfigContextLoader.class)
 @Testcontainers
 public class ArticleRepositoryLiveTest {
-  @Container private ArangoContainer container = ArangoContainer.getInstance();
+    @Container
+    private static ArangoContainer container = ArangoContainer.getInstance();
 
-  @BeforeEach
-  public void beforeEach() {
-    System.out.println(container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
-    System.setProperty(
-        "arangodb.hosts", container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
-    System.setProperty("arangodb.user", "root");
-    System.setProperty("arangodb.password", "password");
-  }
+    @Configuration
+    @EnableArangoRepositories(basePackages = {"com.ymmihw.spring"})
+    public static class ArangoDbDockerConfiguration implements ArangoConfiguration {
 
-  //  @Configuration
-  //  @EnableArangoRepositories(basePackages = {"com.ymmihw.spring"})
-  //  public static class ArangoDbDockerConfiguration implements ArangoConfiguration {
-  //
-  //    @Override
-  //    public ArangoDB.Builder arango() {
-  //      return new ArangoDB.Builder()
-  //          .host(container.getContainerIpAddress(), container.getFirstMappedPort())
-  //          .user("root")
-  //          .password("password");
-  //    }
-  //
-  //    @Override
-  //    public String database() {
-  //      return "baeldung-database";
-  //    }
-  //  }
+        @Override
+        public ArangoDB.Builder arango() {
+            return new ArangoDB.Builder()
+                    .host(container.getContainerIpAddress(), container.getFirstMappedPort())
+                    .user("root")
+                    .password("password");
+        }
 
-  @Autowired ArticleRepository articleRepository;
+        @Override
+        public String database() {
+            return "baeldung-database";
+        }
+    }
 
-  @Test
-  public void givenNewArticle_whenSaveInArangoDb_thenDataIsCorrect() {
-    Article newArticle =
-        new Article(
-            "ArangoDb with Spring Data",
-            "Baeldung Writer",
-            ZonedDateTime.now(),
-            "<html>Some HTML content</html>");
+    @Autowired
+    ArticleRepository articleRepository;
 
-    Article savedArticle = articleRepository.save(newArticle);
+    @Test
+    public void givenNewArticle_whenSaveInArangoDb_thenDataIsCorrect() {
+        Article newArticle =
+                new Article(
+                        "ArangoDb with Spring Data",
+                        "Baeldung Writer",
+                        ZonedDateTime.now(),
+                        "<html>Some HTML content</html>");
 
-    assertNotNull(savedArticle.getId());
-    assertNotNull(savedArticle.getArangoId());
+        Article savedArticle = articleRepository.save(newArticle);
 
-    assertEquals(savedArticle.getName(), newArticle.getName());
-    assertEquals(savedArticle.getAuthor(), newArticle.getAuthor());
-    assertEquals(savedArticle.getPublishDate(), newArticle.getPublishDate());
-    assertEquals(savedArticle.getHtmlContent(), newArticle.getHtmlContent());
-  }
+        assertNotNull(savedArticle.getId());
+        assertNotNull(savedArticle.getArangoId());
 
-  @Test
-  public void givenArticleId_whenReadFromArangoDb_thenDataIsCorrect() {
-    Article newArticle =
-        new Article(
-            "ArangoDb with Spring Data",
-            "Baeldung Writer",
-            ZonedDateTime.now(),
-            "<html>Some HTML content</html>");
+        assertEquals(savedArticle.getName(), newArticle.getName());
+        assertEquals(savedArticle.getAuthor(), newArticle.getAuthor());
+        assertEquals(savedArticle.getPublishDate(), newArticle.getPublishDate());
+        assertEquals(savedArticle.getHtmlContent(), newArticle.getHtmlContent());
+    }
 
-    Article savedArticle = articleRepository.save(newArticle);
+    @Test
+    public void givenArticleId_whenReadFromArangoDb_thenDataIsCorrect() {
+        Article newArticle =
+                new Article(
+                        "ArangoDb with Spring Data",
+                        "Baeldung Writer",
+                        ZonedDateTime.now(),
+                        "<html>Some HTML content</html>");
 
-    String articleId = savedArticle.getId();
+        Article savedArticle = articleRepository.save(newArticle);
 
-    Optional<Article> article = articleRepository.findById(articleId);
-    assertTrue(article.isPresent());
+        String articleId = savedArticle.getId();
 
-    Article foundArticle = article.get();
+        Optional<Article> article = articleRepository.findById(articleId);
+        assertTrue(article.isPresent());
 
-    assertEquals(foundArticle.getId(), articleId);
-    assertEquals(foundArticle.getArangoId(), savedArticle.getArangoId());
-    assertEquals(foundArticle.getName(), savedArticle.getName());
-    assertEquals(foundArticle.getAuthor(), savedArticle.getAuthor());
-    assertEquals(foundArticle.getPublishDate(), savedArticle.getPublishDate());
-    assertEquals(foundArticle.getHtmlContent(), savedArticle.getHtmlContent());
-  }
+        Article foundArticle = article.get();
 
-  @Test
-  public void givenArticleId_whenDeleteFromArangoDb_thenDataIsGone() {
-    Article newArticle =
-        new Article(
-            "ArangoDb with Spring Data",
-            "Baeldung Writer",
-            ZonedDateTime.now(),
-            "<html>Some HTML content</html>");
+        assertEquals(foundArticle.getId(), articleId);
+        assertEquals(foundArticle.getArangoId(), savedArticle.getArangoId());
+        assertEquals(foundArticle.getName(), savedArticle.getName());
+        assertEquals(foundArticle.getAuthor(), savedArticle.getAuthor());
+        assertEquals(foundArticle.getPublishDate(), savedArticle.getPublishDate());
+        assertEquals(foundArticle.getHtmlContent(), savedArticle.getHtmlContent());
+    }
 
-    Article savedArticle = articleRepository.save(newArticle);
+    @Test
+    public void givenArticleId_whenDeleteFromArangoDb_thenDataIsGone() {
+        Article newArticle =
+                new Article(
+                        "ArangoDb with Spring Data",
+                        "Baeldung Writer",
+                        ZonedDateTime.now(),
+                        "<html>Some HTML content</html>");
 
-    String articleId = savedArticle.getId();
+        Article savedArticle = articleRepository.save(newArticle);
 
-    articleRepository.deleteById(articleId);
+        String articleId = savedArticle.getId();
 
-    Optional<Article> article = articleRepository.findById(articleId);
-    assertFalse(article.isPresent());
-  }
+        articleRepository.deleteById(articleId);
 
-  @Test
-  public void givenAuthorName_whenGetByAuthor_thenListOfArticles() {
-    Article newArticle =
-        new Article(
-            "ArangoDb with Spring Data",
-            "Baeldung Writer",
-            ZonedDateTime.now(),
-            "<html>Some HTML content</html>");
-    newArticle.setAuthor(UUID.randomUUID().toString());
-    articleRepository.save(newArticle);
+        Optional<Article> article = articleRepository.findById(articleId);
+        assertFalse(article.isPresent());
+    }
 
-    Iterable<Article> articlesByAuthor = articleRepository.findByAuthor(newArticle.getAuthor());
-    List<Article> articlesByAuthorList = new ArrayList<>();
-    articlesByAuthor.forEach(articlesByAuthorList::add);
+    @Test
+    public void givenAuthorName_whenGetByAuthor_thenListOfArticles() {
+        Article newArticle =
+                new Article(
+                        "ArangoDb with Spring Data",
+                        "Baeldung Writer",
+                        ZonedDateTime.now(),
+                        "<html>Some HTML content</html>");
+        newArticle.setAuthor(UUID.randomUUID().toString());
+        articleRepository.save(newArticle);
 
-    assertEquals(1, articlesByAuthorList.size());
+        Iterable<Article> articlesByAuthor = articleRepository.findByAuthor(newArticle.getAuthor());
+        List<Article> articlesByAuthorList = new ArrayList<>();
+        articlesByAuthor.forEach(articlesByAuthorList::add);
 
-    Article foundArticle = articlesByAuthorList.get(0);
-    assertEquals(foundArticle.getName(), newArticle.getName());
-    assertEquals(foundArticle.getAuthor(), newArticle.getAuthor());
-    assertEquals(foundArticle.getPublishDate(), newArticle.getPublishDate());
-    assertEquals(foundArticle.getHtmlContent(), newArticle.getHtmlContent());
-  }
+        assertEquals(1, articlesByAuthorList.size());
+
+        Article foundArticle = articlesByAuthorList.get(0);
+        assertEquals(foundArticle.getName(), newArticle.getName());
+        assertEquals(foundArticle.getAuthor(), newArticle.getAuthor());
+        assertEquals(foundArticle.getPublishDate(), newArticle.getPublishDate());
+        assertEquals(foundArticle.getHtmlContent(), newArticle.getHtmlContent());
+    }
 }
