@@ -23,23 +23,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
 @ContextConfiguration(
     classes = {ArangoDbDockerConfiguration.class},
     loader = AnnotationConfigContextLoader.class)
+@Testcontainers
 public class ArticleRepositoryLiveTest {
-
-  private static ArangoContainer container = ArangoContainer.getInstance();
-
-  @BeforeAll
-  public static void beforeAll() {
-    container.start();
-  }
+  @Container private ArangoContainer container = ArangoContainer.getInstance();
 
   @Configuration
   @EnableArangoRepositories(basePackages = {"com.ymmihw.spring"})
-  public static class ArangoDbDockerConfiguration implements ArangoConfiguration {
+  public class ArangoDbDockerConfiguration implements ArangoConfiguration {
 
     @Override
     public ArangoDB.Builder arango() {
