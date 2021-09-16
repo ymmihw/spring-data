@@ -33,7 +33,8 @@ public class ArticleRepositoryLiveTest {
   @Container private ArangoContainer container = ArangoContainer.getInstance();
 
   @BeforeEach
-  public void beforeAll() {
+  public void beforeEach() {
+    System.out.println(container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
     System.setProperty(
         "arangodb.hosts", container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
     System.setProperty("arangodb.user", "root");
