@@ -1,5 +1,6 @@
 package com.ymmihw.spring;
 
+import java.util.List;
 import org.testcontainers.containers.GenericContainer;
 
 public class ArangoContainer extends GenericContainer<ArangoContainer> {
@@ -19,6 +20,9 @@ public class ArangoContainer extends GenericContainer<ArangoContainer> {
 
   @Override
   public void start() {
+    List<String> env = getEnv();
+    env.add("ARANGO_ROOT_PASSWORD=password");
+    this.setEnv(env);
     super.addExposedPort(8529);
     super.start();
   }
