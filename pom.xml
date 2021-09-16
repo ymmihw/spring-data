@@ -19,7 +19,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <guava.version>30.1.1-jre</guava.version>
-    <testcontainers.version>1.11.3</testcontainers.version>
+    <testcontainers.version>1.16.0</testcontainers.version>
   </properties>
   <dependencyManagement>
     <dependencies>
