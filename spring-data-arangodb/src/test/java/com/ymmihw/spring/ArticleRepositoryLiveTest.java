@@ -5,10 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.arangodb.ArangoDB;
-import com.arangodb.springframework.annotation.EnableArangoRepositories;
-import com.arangodb.springframework.config.ArangoConfiguration;
-import com.ymmihw.spring.ArticleRepositoryLiveTest.ArangoDbDockerConfiguration;
 import com.ymmihw.spring.model.Article;
 import com.ymmihw.spring.repository.ArticleRepository;
 import java.time.ZonedDateTime;
@@ -16,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.testcontainers.junit.jupiter.Container;
@@ -27,29 +23,39 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
 @ContextConfiguration(
-    classes = {ArangoDbDockerConfiguration.class},
+    classes = {
+      //        ArangoDbDockerConfiguration.class
+    },
     loader = AnnotationConfigContextLoader.class)
 @Testcontainers
 public class ArticleRepositoryLiveTest {
-  @Container private static ArangoContainer container = ArangoContainer.getInstance();
+  @Container private ArangoContainer container = ArangoContainer.getInstance();
 
-  @Configuration
-  @EnableArangoRepositories(basePackages = {"com.ymmihw.spring"})
-  public static class ArangoDbDockerConfiguration implements ArangoConfiguration {
-
-    @Override
-    public ArangoDB.Builder arango() {
-      return new ArangoDB.Builder()
-          .host(container.getContainerIpAddress(), container.getFirstMappedPort())
-          .user("root")
-          .password("password");
-    }
-
-    @Override
-    public String database() {
-      return "baeldung-database";
-    }
+  @BeforeAll
+  public void beforeAll() {
+    System.setProperty(
+        "arangodb.hosts", container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
+    System.setProperty("arangodb.user", "root");
+    System.setProperty("arangodb.password", "password");
   }
+
+  //  @Configuration
+  //  @EnableArangoRepositories(basePackages = {"com.ymmihw.spring"})
+  //  public static class ArangoDbDockerConfiguration implements ArangoConfiguration {
+  //
+  //    @Override
+  //    public ArangoDB.Builder arango() {
+  //      return new ArangoDB.Builder()
+  //          .host(container.getContainerIpAddress(), container.getFirstMappedPort())
+  //          .user("root")
+  //          .password("password");
+  //    }
+  //
+  //    @Override
+  //    public String database() {
+  //      return "baeldung-database";
+  //    }
+  //  }
 
   @Autowired ArticleRepository articleRepository;
 
