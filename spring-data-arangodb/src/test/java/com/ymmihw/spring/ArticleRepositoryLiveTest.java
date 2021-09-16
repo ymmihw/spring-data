@@ -16,21 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@EnableConfigurationProperties
-@SpringBootTest(classes = ArangoDbDockerConfiguration.class)
+@SpringBootTest
+@ContextConfiguration(
+    classes = {ArangoDbDockerConfiguration.class},
+    loader = AnnotationConfigContextLoader.class)
 public class ArticleRepositoryLiveTest {
 
-  @ClassRule public static ArangoContainer container = ArangoContainer.getInstance();
+  private static ArangoContainer container = ArangoContainer.getInstance();
+
+  @BeforeAll
+  public static void beforeAll() {
+    container.start();
+  }
 
   @Configuration
   @EnableArangoRepositories(basePackages = {"com.ymmihw.spring"})
