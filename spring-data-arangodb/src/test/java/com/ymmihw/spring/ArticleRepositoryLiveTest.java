@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,11 +31,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
     loader = AnnotationConfigContextLoader.class)
 @Testcontainers
 public class ArticleRepositoryLiveTest {
-  @Container private ArangoContainer container = ArangoContainer.getInstance();
+  @Container private static ArangoContainer container = ArangoContainer.getInstance();
 
   @Configuration
   @EnableArangoRepositories(basePackages = {"com.ymmihw.spring"})
-  public class ArangoDbDockerConfiguration implements ArangoConfiguration {
+  public static class ArangoDbDockerConfiguration implements ArangoConfiguration {
 
     @Override
     public ArangoDB.Builder arango() {
