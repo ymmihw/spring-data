@@ -3,8 +3,8 @@ package com.ymmihw.spring.data.mongodb.repository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.startsWith;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -19,7 +19,7 @@ public class AccountMongoRepositoryIntegrationTest extends BaseTest {
   @Autowired
   AccountMongoRepository repository;
 
-  @Before
+  @BeforeEach
   public void before() {
     repository.deleteAll().block();
   }

@@ -1,30 +1,5 @@
 package com.ymmihw.spring.data.mongodb.gridfs;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import org.bson.Document;
-import org.junit.After;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoClient;
@@ -34,30 +9,60 @@ import com.mongodb.client.gridfs.GridFSFindIterable;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.ymmihw.spring.data.mongodb.MongoContainer;
 import com.ymmihw.spring.data.mongodb.gridfs.GridFSLiveTest.MongoClientDockerConfig;
+import org.bson.Document;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.test.context.ContextConfiguration;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @ContextConfiguration(
     classes = {MongoConfig.class, MongoClientDockerConfig.class, GridFsTemplateConfig.class})
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
+@Testcontainers
 public class GridFSLiveTest {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
-  @ClassRule
-  public static MongoContainer container = MongoContainer.getInstance();
+  @Container public static MongoContainer container = MongoContainer.getInstance();
 
   @Configuration
   public static class MongoClientDockerConfig {
     @Bean
     public MongoClient mongo() throws Exception {
-      MongoClient client = MongoClients.create(
-          "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
+      MongoClient client =
+          MongoClients.create(
+              "mongodb://"
+                  + container.getContainerIpAddress()
+                  + ":"
+                  + container.getFirstMappedPort());
       return client;
     }
   }
 
-  @Autowired
-  private GridFsTemplate gridFsTemplate;
+  @Autowired private GridFsTemplate gridFsTemplate;
 
-  @After
+  @AfterEach
   public void tearDown() {
     GridFSFindIterable fileList = gridFsTemplate.find(new Query());
     for (GridFSFile file : fileList) {
@@ -97,7 +102,7 @@ public class GridFSLiveTest {
     Document document = gridFSDBFile.getMetadata();
     assertNotNull(document);
     assertThat(gridFSDBFile.getObjectId().toString(), is(id));
-    assertThat(document.keySet().size(), is(2));
+    assertThat(document.keySet().size(), is(3));
     assertNotNull(gridFSDBFile.getUploadDate());
     assertNotNull(gridFSDBFile.getChunkSize());
     assertThat(gridFSDBFile.getFilename(), is("test.png"));
@@ -133,8 +138,9 @@ public class GridFSLiveTest {
   }
 
   @Test
-  public void givenMetadataAndFilesExist_whenFindingAllFilesOnQuery_thenFilesWithMetadataAreFoundOnQuery()
-      throws IOException {
+  public void
+      givenMetadataAndFilesExist_whenFindingAllFilesOnQuery_thenFilesWithMetadataAreFoundOnQuery()
+          throws IOException {
     DBObject metaDataUser1 = new BasicDBObject();
     metaDataUser1.put("user", "alex");
     DBObject metaDataUser2 = new BasicDBObject();

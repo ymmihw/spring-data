@@ -1,12 +1,10 @@
 package com.ymmihw.spring.data.mongodb.introduction.repository;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import java.util.List;
-import java.util.Optional;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import com.ymmihw.spring.data.mongodb.introduction.BaseTest;
+import com.ymmihw.spring.data.mongodb.introduction.model.User;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,8 +13,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import com.ymmihw.spring.data.mongodb.introduction.BaseTest;
-import com.ymmihw.spring.data.mongodb.introduction.model.User;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UserRepositoryLiveTest extends BaseTest {
   @Autowired
@@ -25,14 +27,14 @@ public class UserRepositoryLiveTest extends BaseTest {
   @Autowired
   private MongoOperations mongoOps;
 
-  @Before
+  @BeforeEach
   public void testSetup() {
     if (!mongoOps.collectionExists(User.class)) {
       mongoOps.createCollection(User.class);
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     mongoOps.dropCollection(User.class);
   }

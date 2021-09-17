@@ -3,9 +3,9 @@ package com.ymmihw.spring.data.mongodb;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.List;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.SessionSynchronization;
@@ -25,14 +25,14 @@ public class MongoTransactionTemplateLiveTest extends BaseTest {
   @Autowired
   private MongoTransactionManager mongoTransactionManager;
 
-  @Before
+  @BeforeEach
   public void testSetup() {
     if (!mongoTemplate.collectionExists(User.class)) {
       mongoTemplate.createCollection(User.class);
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     mongoTemplate.dropCollection(User.class);
   }

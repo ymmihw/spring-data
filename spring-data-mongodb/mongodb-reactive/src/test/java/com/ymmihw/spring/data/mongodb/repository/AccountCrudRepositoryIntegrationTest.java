@@ -2,8 +2,8 @@ package com.ymmihw.spring.data.mongodb.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.ymmihw.spring.data.mongodb.BaseTest;
 import com.ymmihw.spring.data.mongodb.model.Account;
@@ -16,7 +16,7 @@ public class AccountCrudRepositoryIntegrationTest extends BaseTest {
   @Autowired
   AccountCrudRepository repository;
 
-  @Before
+  @BeforeEach
   public void before() {
     repository.deleteAll().block();
   }

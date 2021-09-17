@@ -1,9 +1,10 @@
 package com.ymmihw.spring.data.mongodb.iac;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,26 +16,35 @@ import com.ymmihw.spring.data.mongodb.iac.BaseTest.MongoClientDockerConfig;
 import com.ymmihw.spring.data.mongodb.iac.config.MongoConfig;
 import com.ymmihw.spring.data.mongodb.iac.model.EmailAddress;
 import com.ymmihw.spring.data.mongodb.iac.model.User;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@ContextConfiguration(classes = {MongoClientDockerConfig.class, MongoConfig.class})
+@SpringBootTest
+@ContextConfiguration(
+    classes = {MongoClientDockerConfig.class, MongoConfig.class},
+    loader = AnnotationConfigContextLoader.class)
+@Testcontainers
 public class BaseTest {
-  @ClassRule
-  public static MongoContainer container = MongoContainer.getInstance();
+  @Container public static MongoContainer container = MongoContainer.getInstance();
 
   @Configuration
   public static class MongoClientDockerConfig {
     @Bean
     public MongoClient mongo() throws Exception {
-      MongoClient client = MongoClients.create(
-          "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
+      MongoClient client =
+          MongoClients.create(
+              "mongodb://"
+                  + container.getContainerIpAddress()
+                  + ":"
+                  + container.getFirstMappedPort());
       return client;
     }
   }
 
-  @Autowired
-  protected MongoTemplate mongoTemplate;
+  @Autowired protected MongoTemplate mongoTemplate;
 
-  @Before
+  @BeforeEach
   public void testSetup() {
     if (!mongoTemplate.collectionExists(User.class)) {
       mongoTemplate.createCollection(User.class);
@@ -44,7 +54,7 @@ public class BaseTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     mongoTemplate.dropCollection(User.class);
     mongoTemplate.dropCollection(EmailAddress.class);

@@ -1,20 +1,5 @@
 package com.ymmihw.spring.data.mongodb.custom.cascading;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.ymmihw.spring.data.mongodb.MongoContainer;
@@ -22,29 +7,47 @@ import com.ymmihw.spring.data.mongodb.custom.cascading.UserRepositoryLiveTest.Mo
 import com.ymmihw.spring.data.mongodb.custom.cascading.config.SimpleMongoConfig;
 import com.ymmihw.spring.data.mongodb.custom.cascading.model.EmailAddress;
 import com.ymmihw.spring.data.mongodb.custom.cascading.model.User;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.test.context.ContextConfiguration;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 @ContextConfiguration(classes = {SimpleMongoConfig.class, MongoClientDockerConfig.class})
+@SpringBootTest
+@Testcontainers
 public class UserRepositoryLiveTest {
 
-  @ClassRule
-  public static MongoContainer container = MongoContainer.getInstance();
+  @Container public static MongoContainer container = MongoContainer.getInstance();
 
   @Configuration
   public static class MongoClientDockerConfig {
     @Bean
     public MongoClient mongo() throws Exception {
-      MongoClient client = MongoClients.create(
-          "mongodb://" + container.getContainerIpAddress() + ":" + container.getFirstMappedPort());
+      MongoClient client =
+          MongoClients.create(
+              "mongodb://"
+                  + container.getContainerIpAddress()
+                  + ":"
+                  + container.getFirstMappedPort());
       return client;
     }
   }
 
-  @Autowired
-  private MongoTemplate mongoTemplate;
+  @Autowired private MongoTemplate mongoTemplate;
 
-
-  @Before
+  @BeforeEach
   public void testSetup() {
     if (!mongoTemplate.collectionExists(User.class)) {
       mongoTemplate.createCollection(User.class);
@@ -54,7 +57,7 @@ public class UserRepositoryLiveTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     mongoTemplate.dropCollection(User.class);
     mongoTemplate.dropCollection(EmailAddress.class);
@@ -69,9 +72,11 @@ public class UserRepositoryLiveTest {
     user.setEmailAddress(emailAddress);
     mongoTemplate.insert(user);
 
-    assertThat(mongoTemplate.findOne(Query.query(Criteria.where("name").is("Brendan")), User.class)
-        .getEmailAddress().getValue(), is("b@gmail.com"));
+    assertThat(
+        mongoTemplate
+            .findOne(Query.query(Criteria.where("name").is("Brendan")), User.class)
+            .getEmailAddress()
+            .getValue(),
+        is("b@gmail.com"));
   }
-
-
 }
