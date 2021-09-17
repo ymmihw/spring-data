@@ -1,20 +1,16 @@
 package com.ymmihw.spring.data.elasticsearch.introduction;
 
-import static java.util.Arrays.asList;
-import static org.elasticsearch.index.query.Operator.AND;
-import static org.elasticsearch.index.query.QueryBuilders.fuzzyQuery;
-import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
-import static org.elasticsearch.index.query.QueryBuilders.regexpQuery;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import java.util.List;
+import com.ymmihw.spring.data.elasticsearch.MyElasticsearchContainer;
+import com.ymmihw.spring.data.elasticsearch.introduction.ElasticSearchIntegrationTest.DockerClient;
+import com.ymmihw.spring.data.elasticsearch.introduction.config.Config;
+import com.ymmihw.spring.data.elasticsearch.introduction.model.Article;
+import com.ymmihw.spring.data.elasticsearch.introduction.model.Author;
+import com.ymmihw.spring.data.elasticsearch.introduction.service.ArticleService;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
@@ -28,19 +24,25 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.ymmihw.spring.data.elasticsearch.MyElasticsearchContainer;
-import com.ymmihw.spring.data.elasticsearch.introduction.ElasticSearchIntegrationTest.DockerClient;
-import com.ymmihw.spring.data.elasticsearch.introduction.config.Config;
-import com.ymmihw.spring.data.elasticsearch.introduction.model.Article;
-import com.ymmihw.spring.data.elasticsearch.introduction.model.Author;
-import com.ymmihw.spring.data.elasticsearch.introduction.service.ArticleService;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {Config.class, DockerClient.class})
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static org.elasticsearch.index.query.Operator.AND;
+import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.junit.Assert.*;
+
+@SpringBootTest
+@ContextConfiguration(
+    classes = {Config.class, DockerClient.class},
+    loader = AnnotationConfigContextLoader.class)
+@Testcontainers
 public class ElasticSearchIntegrationTest {
 
-  @ClassRule
+  @Container
   public static MyElasticsearchContainer container = MyElasticsearchContainer.getInstance();
 
   @Configuration
@@ -49,27 +51,24 @@ public class ElasticSearchIntegrationTest {
     @Override
     @Bean
     public RestHighLevelClient elasticsearchClient() {
-      final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-          .connectedTo(container.getContainerIpAddress() + ":" + container.getMappedPort(9200))
-          .build();
+      final ClientConfiguration clientConfiguration =
+          ClientConfiguration.builder()
+              .connectedTo(container.getContainerIpAddress() + ":" + container.getMappedPort(9200))
+              .build();
 
       return RestClients.create(clientConfiguration).rest();
     }
-
   }
 
-  @Autowired
-  private ElasticsearchOperations elasticsearchOperations;
+  @Autowired private ElasticsearchOperations elasticsearchOperations;
 
-
-  @Autowired
-  private ArticleService articleService;
+  @Autowired private ArticleService articleService;
 
   private final Author johnSmith = new Author("John Smith");
   private final Author johnDoe = new Author("John Doe");
 
-  @Before
-  public void before() {
+  @BeforeEach
+  public void beforeEach() {
 
     IndexOperations indexOperations = elasticsearchOperations.indexOps(Article.class);
     indexOperations.delete();
@@ -151,8 +150,10 @@ public class ElasticSearchIntegrationTest {
 
     final String articleTitle = "Spring Data Elasticsearch";
 
-    final Query searchQuery = new NativeSearchQueryBuilder()
-        .withQuery(matchQuery("title", articleTitle).minimumShouldMatch("75%")).build();
+    final Query searchQuery =
+        new NativeSearchQueryBuilder()
+            .withQuery(matchQuery("title", articleTitle).minimumShouldMatch("75%"))
+            .build();
     final List<SearchHit<Article>> articles =
         elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();
     assertEquals(1, articles.size());
@@ -165,8 +166,10 @@ public class ElasticSearchIntegrationTest {
 
   @Test
   public void givenSavedDoc_whenOneTermMatches_thenFindByTitle() {
-    final Query searchQuery = new NativeSearchQueryBuilder()
-        .withQuery(matchQuery("title", "Search engines").operator(AND)).build();
+    final Query searchQuery =
+        new NativeSearchQueryBuilder()
+            .withQuery(matchQuery("title", "Search engines").operator(AND))
+            .build();
     final List<SearchHit<Article>> articles =
         elasticsearchOperations.search(searchQuery, Article.class).getSearchHits();
     assertEquals(1, articles.size());

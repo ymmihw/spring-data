@@ -2,13 +2,16 @@ package com.ymmihw.spring.data.elasticsearch;
 
 import java.util.List;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
+import org.testcontainers.utility.DockerImageName;
 
 public class MyElasticsearchContainer extends ElasticsearchContainer {
-  private static final String IMAGE_VERSION = "elasticsearch:7.7.0";
+  private static final DockerImageName myImage =
+      DockerImageName.parse("elasticsearch:7.12.1")
+          .asCompatibleSubstituteFor("docker.elastic.co/elasticsearch/elasticsearch");
   private static MyElasticsearchContainer container;
 
   private MyElasticsearchContainer() {
-    super(IMAGE_VERSION);
+    super(myImage);
   }
 
   public static MyElasticsearchContainer getInstance() {
@@ -27,7 +30,6 @@ public class MyElasticsearchContainer extends ElasticsearchContainer {
     this.setEnv(env);
     super.start();
   }
-
 
   @Override
   public void stop() {
