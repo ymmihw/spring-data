@@ -1,17 +1,15 @@
 package com.ymmihw.spring.data.mongodb.iac;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ymmihw.spring.data.mongodb.iac.model.EmailAddress;
 import com.ymmihw.spring.data.mongodb.iac.model.User;
+import org.junit.jupiter.api.Test;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
+
 public class AnnotationTest extends BaseTest {
   @Test
   public void whenSavingUserWithoutSettingAge_thenAgeIsSetByDefault() {
@@ -31,8 +29,11 @@ public class AnnotationTest extends BaseTest {
     user.setYearOfBirth(1985);
     mongoTemplate.insert(user);
 
-    assertThat(mongoTemplate.findOne(Query.query(Criteria.where("name").is("Alex")), User.class)
-        .getYearOfBirth(), is(nullValue()));
+    assertThat(
+        mongoTemplate
+            .findOne(Query.query(Criteria.where("name").is("Alex")), User.class)
+            .getYearOfBirth(),
+        is(nullValue()));
   }
 
   @Test
@@ -44,7 +45,11 @@ public class AnnotationTest extends BaseTest {
     user.setEmailAddress(emailAddress);
     mongoTemplate.insert(user);
 
-    assertThat(mongoTemplate.findOne(Query.query(Criteria.where("name").is("Brendan")), User.class)
-        .getEmailAddress().getValue(), is("b@gmail.com"));
+    assertThat(
+        mongoTemplate
+            .findOne(Query.query(Criteria.where("name").is("Brendan")), User.class)
+            .getEmailAddress()
+            .getValue(),
+        is("b@gmail.com"));
   }
 }

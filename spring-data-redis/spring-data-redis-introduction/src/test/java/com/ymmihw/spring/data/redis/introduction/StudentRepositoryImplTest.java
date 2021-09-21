@@ -1,29 +1,33 @@
 package com.ymmihw.spring.data.redis.introduction;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import java.util.Map;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import com.ymmihw.spring.data.redis.RedisContainer;
 import com.ymmihw.spring.data.redis.introduction.config.RedisConfig;
 import com.ymmihw.spring.data.redis.introduction.model.Student;
 import com.ymmihw.spring.data.redis.introduction.repo.StudentRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = RedisConfig.class)
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+@SpringBootTest
+@ContextConfiguration(
+    classes = {RedisConfig.class},
+    loader = AnnotationConfigContextLoader.class)
 @TestPropertySource(locations = "classpath:/application.properties")
+@Testcontainers
 public class StudentRepositoryImplTest {
-  @ClassRule
-  public static RedisContainer container = RedisContainer.getInstance();
+  @Container public static RedisContainer container = RedisContainer.getInstance();
 
-  @Autowired
-  private StudentRepository studentRepository;
+  @Autowired private StudentRepository studentRepository;
 
   @Test
   public void whenSavingStudent_thenAvailableOnRetrieval() throws Exception {

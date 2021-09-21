@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.ymmihw.spring.data.mongodb.BaseTest;
 import com.ymmihw.spring.data.mongodb.model.Account;
@@ -17,7 +17,7 @@ public class AccountTemplateOperationsIntegrationTest extends BaseTest {
   @Autowired
   AccountTemplateOperations accountTemplate;
 
-  @Before
+  @BeforeEach
   public void before() {
     accountTemplate.deleteAll();
   }

@@ -1,30 +1,32 @@
 package com.ymmihw.spring.data.mongodb;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.ymmihw.spring.data.mongodb.ActionRepositoryLiveTest.MongoClientDockerConfig;
 import com.ymmihw.spring.data.mongodb.config.MongoConfig;
 import com.ymmihw.spring.data.mongodb.model.Action;
 import com.ymmihw.spring.data.mongodb.repository.ActionRepository;
+import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.context.ContextConfiguration;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+
+@SpringBootTest
+@Testcontainers
 @ContextConfiguration(classes = {MongoClientDockerConfig.class, MongoConfig.class})
 public class ActionRepositoryLiveTest {
-  @ClassRule
+  @Container
   public static MongoContainer container = MongoContainer.getInstance();
 
   @Configuration
@@ -43,7 +45,7 @@ public class ActionRepositoryLiveTest {
   @Autowired
   private ActionRepository actionRepository;
 
-  @Before
+  @BeforeEach
   public void setup() {
     if (!mongoTemplate.collectionExists(Action.class)) {
       mongoTemplate.createCollection(Action.class);
@@ -61,7 +63,7 @@ public class ActionRepositoryLiveTest {
     Assert.assertEquals(now.withNano(0), savedAction.getTime().withNano(0));
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     mongoTemplate.dropCollection(Action.class);
   }

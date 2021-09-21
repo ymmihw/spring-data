@@ -3,7 +3,7 @@ package com.ymmihw.spring.data.mongodb.queries.repository;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import com.ymmihw.spring.data.mongodb.queries.model.User;
 
 public class QueryMethodsLiveTest extends BaseQueryLiveTest {

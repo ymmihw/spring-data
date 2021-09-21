@@ -1,18 +1,19 @@
 package com.ymmihw.spring.data.mongodb.introduction.mongotemplate;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import com.ymmihw.spring.data.mongodb.introduction.BaseTest;
+import com.ymmihw.spring.data.mongodb.introduction.model.User;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import com.ymmihw.spring.data.mongodb.introduction.BaseTest;
-import com.ymmihw.spring.data.mongodb.introduction.model.User;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class MongoTemplateTest extends BaseTest {
 
@@ -22,14 +23,14 @@ public class MongoTemplateTest extends BaseTest {
   @Autowired
   private MongoTemplate mongoTemplate;
 
-  @Before
+  @BeforeEach
   public void testSetup() {
     if (!mongoOps.collectionExists(User.class)) {
       mongoOps.createCollection(User.class);
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     mongoOps.dropCollection(User.class);
   }

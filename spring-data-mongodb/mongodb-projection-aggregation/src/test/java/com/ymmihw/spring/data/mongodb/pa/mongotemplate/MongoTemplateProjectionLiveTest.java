@@ -2,9 +2,9 @@ package com.ymmihw.spring.data.mongodb.pa.mongotemplate;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -16,14 +16,14 @@ public class MongoTemplateProjectionLiveTest extends BaseTest {
   @Autowired
   private MongoTemplate mongoTemplate;
 
-  @Before
+  @BeforeEach
   public void testSetup() {
     if (!mongoTemplate.collectionExists(User.class)) {
       mongoTemplate.createCollection(User.class);
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     mongoTemplate.dropCollection(User.class);
   }

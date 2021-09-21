@@ -1,21 +1,20 @@
 package com.ymmihw.spring.data.cassandra;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.springframework.data.cassandra.core.query.Query.query;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+import com.datastax.driver.core.utils.UUIDs;
+import com.datastax.oss.driver.api.core.CqlIdentifier;
+import com.google.common.collect.ImmutableSet;
+import com.ymmihw.spring.data.cassandra.CqlQueriesIntegrationTest.DockerCassandraConfig;
+import com.ymmihw.spring.data.cassandra.model.Book;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -24,18 +23,22 @@ import org.springframework.data.cassandra.core.CassandraAdminTemplate;
 import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.testcontainers.containers.CassandraContainer;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.utils.UUIDs;
-import com.datastax.oss.driver.api.core.CqlIdentifier;
-import com.google.common.collect.ImmutableSet;
-import com.ymmihw.spring.data.cassandra.CqlQueriesIntegrationTest.DockerCassandraConfig;
-import com.ymmihw.spring.data.cassandra.model.Book;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.springframework.data.cassandra.core.query.Query.query;
+
 @ContextConfiguration(classes = DockerCassandraConfig.class)
+@SpringBootTest
+@Testcontainers
 public class CqlQueriesIntegrationTest {
   @Configuration
   @PropertySource(value = {"classpath:cassandra.properties"})
@@ -66,7 +69,7 @@ public class CqlQueriesIntegrationTest {
 
   }
 
-  @ClassRule
+  @Container
   public static CassandraContainer<?> container = new CassandraContainer<>("cassandra:3.11.6");
 
 
@@ -85,7 +88,7 @@ public class CqlQueriesIntegrationTest {
   @Autowired
   private CassandraTemplate cassandraTemplate;
 
-  @BeforeClass
+  @BeforeAll
   public static void startCassandraEmbedded() throws InterruptedException, IOException {
     container.start();
     Cluster cluster =
@@ -98,7 +101,7 @@ public class CqlQueriesIntegrationTest {
     Thread.sleep(5000);
   }
 
-  @Before
+  @BeforeEach
   public void createTable() throws InterruptedException, IOException {
     adminTemplate.createTable(true, CqlIdentifier.fromCql(DATA_TABLE_NAME), Book.class,
         new HashMap<String, Object>());
@@ -144,7 +147,7 @@ public class CqlQueriesIntegrationTest {
     assertEquals(uuid, retrievedBook.getId());
   }
 
-  @After
+  @AfterEach
   public void dropTable() {
     adminTemplate.dropTable(CqlIdentifier.fromCql(DATA_TABLE_NAME));
   }
