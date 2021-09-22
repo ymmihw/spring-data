@@ -3,7 +3,7 @@ package com.ymmihw.spring.data.solr.repository;
 import org.testcontainers.containers.GenericContainer;
 
 public class SolrContainer extends GenericContainer<SolrContainer> {
-  private static final String IMAGE_VERSION = "solr:7.7.1";
+  private static final String IMAGE_VERSION = "solr:7.7.3";
   private static SolrContainer container;
 
   private SolrContainer() {
